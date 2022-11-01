@@ -14,32 +14,37 @@ module Traceability.V1.OffChain
     ,   RedeemerParams (..)
     ) where
 
-import           Traceability.V1.OnChain            (nftCurSymbol, nftPolicy, typedLockTokenValidator, 
-                                                     lockTokenValidator)
-import           Traceability.V1.Types              (LockTokenValParams(..), NFTMintPolicyParams(..), MintPolicyRedeemer(..))
-import           Control.Lens                       (review)
+import           Traceability.V1.OnChain            (etCurSymbol, etPolicy, minAda)
+import           Traceability.V1.Types              (ETMintPolicyParams(..), MintPolicyRedeemer(..))
 import           Control.Monad                      (forever)
 import           Data.Aeson                         (FromJSON, ToJSON)
 import qualified Data.Map as Map                    (keys)
 import qualified Data.Text as T                     (Text)
+import           Data.Void                          (Void)
 import           GHC.Generics                       (Generic)
+import           Ledger                             (getCardanoTxId)
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
 import           Ledger.Address as Address          (PaymentPubKeyHash(..), pubKeyHashAddress)
-import           Ledger.Constraints as Constraints  (adjustUnbalancedTx, mintingPolicy, mustMintValueWithRedeemer, 
-                                                     mustPayToPubKey, mustPayToTheScript, 
-                                                     mustSpendPubKeyOutput, otherScript, 
-                                                     typedValidatorLookups, unspentOutputs)
+import           Ledger.Constraints as Constraints  (mintingPolicy, mustMintValueWithRedeemer, 
+                                                     mustPayToPubKey,  
+                                                     mustSpendPubKeyOutput,  
+                                                     unspentOutputs)
 import           Ledger.Scripts as Scripts          (Redeemer(..))
 import           Ledger.Value as Value              (singleton, TokenName(..))
 import           Playground.Contract as Playground  (ToSchema)
-import qualified Plutus.Contract as Contract        (AsContractError (_ConstraintResolutionContractError), awaitPromise, 
-                                                     Contract, Endpoint, endpoint, handleError, logError, 
-                                                     logInfo, mapError, utxosAt)
-import           Plutus.Contract.Request as Request (mkTxContract, submitTxConfirmed, ownPaymentPubKeyHash)
+import qualified Plutus.Contract as Contract        ( 
+                                                     awaitTxConfirmed, awaitPromise, 
+                                                     Contract, Endpoint, 
+                                                     endpoint, handleError, logError, 
+                                                     submitTxConstraintsWith, 
+                                                     logInfo, utxosAt)
+import           Plutus.Contract.Request as Request (ownPaymentPubKeyHash)
+import           PlutusPrelude                      (void)
 import           PlutusTx                           (toBuiltinData)
-import           PlutusTx.Prelude                   (Bool(..), BuiltinByteString, Integer, Maybe (..), ($), divide, 
-                                                     (-), (++), (*))
+import           PlutusTx.Prelude                   (Bool(..), BuiltinByteString, Integer, 
+                                                     Maybe (..), ($), divide,  (-), (*))                             
 import qualified Prelude as Haskell                 (Semigroup ((<>)), Show (..), String)
+import           Text.Printf                        (printf)
 
 
 -- | TokenParams are parameters that are passed to the endpoints
@@ -63,17 +68,17 @@ data RedeemerParams = RedeemerParams
     } deriving (Haskell.Show, Generic, FromJSON, ToJSON, Playground.ToSchema)
 
 
--- | mintNFT mints the order token.   This offchain function is only used by the PAB
+-- | mintETT the order token.   This offchain function is only used by the PAB
 --   simulator to test the validation rules of the minting policy validator. 
-mintNFTToken :: RedeemerParams -> TokenParams -> Contract.Contract () TokenSchema T.Text ()
-mintNFTToken rp tp = do
+mintETToken :: RedeemerParams -> TokenParams -> Contract.Contract () TokenSchema T.Text ()
+mintETToken rp tp = do
      
     ownPkh <- Request.ownPaymentPubKeyHash
     utxos <- Contract.utxosAt (Address.pubKeyHashAddress ownPkh Nothing)
     case Map.keys utxos of
         []       -> Contract.logError @Haskell.String "mintToken: No utxo found"
         oref : _ -> do
-            let tn = Value.TokenName $ rpOrderId rp
+            let tn = Value.TokenName "Earthtrust"
                 merchSplit = (rpAdaAmount rp) * (rpSplit rp)
                 donorSplit = (rpAdaAmount rp) * (100 - (tpSplit tp))
                 merchAmount = divide merchSplit 100
@@ -81,46 +86,38 @@ mintNFTToken rp tp = do
                 red = Scripts.Redeemer $ toBuiltinData $ MintPolicyRedeemer 
                      {
                         mpPolarity = True  -- mint token
-                     ,  mpOrderId = tn
                      ,  mpAdaAmount = rpAdaAmount rp
                      }
-                mintParams = NFTMintPolicyParams 
+                mintParams = ETMintPolicyParams 
                     {
-                        nftVersion = tpVersion tp
-                    ,   nftSplit = tpSplit tp
-                    ,   nftMerchantPkh = tpMerchantPkh tp
-                    ,   nftDonorPkh = tpDonorPkh tp
+                        etpVersion = tpVersion tp
+                    ,   etpSplit = tpSplit tp
+                    ,   etpMerchantPkh = tpMerchantPkh tp
+                    ,   etpDonorPkh = tpDonorPkh tp
+                    ,   etpTokenName = tn
                     }
-                vParams = LockTokenValParams
-                    {   
-                        ltvOrderId = tn
-                    }
-                dat = PlutusTx.toBuiltinData ()
   
-            let nftVal  = Value.singleton (nftCurSymbol mintParams) tn 1
-                lookups = Constraints.typedValidatorLookups (typedLockTokenValidator $ PlutusTx.toBuiltinData vParams) Haskell.<> 
-                          Constraints.otherScript (lockTokenValidator $ PlutusTx.toBuiltinData vParams) Haskell.<> 
-                          Constraints.mintingPolicy (nftPolicy mintParams) Haskell.<> 
+            let etVal  = Value.singleton (etCurSymbol mintParams) tn 1
+                lookups = Constraints.mintingPolicy (etPolicy mintParams) Haskell.<> 
                           Constraints.unspentOutputs utxos
-                tx      = Constraints.mustPayToTheScript dat nftVal Haskell.<> 
-                          Constraints.mustMintValueWithRedeemer red nftVal Haskell.<> 
+                tx      = Constraints.mustMintValueWithRedeemer red etVal Haskell.<> 
                           Constraints.mustPayToPubKey (rpMerchantPkh rp) (Ada.lovelaceValueOf merchAmount) Haskell.<> 
                           Constraints.mustPayToPubKey (rpDonorPkh rp) (Ada.lovelaceValueOf donorAmount) Haskell.<> 
+                          Constraints.mustPayToPubKey (rpDonorPkh rp) (minAda Haskell.<> etVal) Haskell.<> 
                           Constraints.mustSpendPubKeyOutput oref
 
-            utx <- Contract.mapError (review Contract._ConstraintResolutionContractError) (Request.mkTxContract lookups tx)
-            let adjustedUtx = Constraints.adjustUnbalancedTx utx
-            Request.submitTxConfirmed adjustedUtx
-            Contract.logInfo $ "mintNFT: tx submitted successfully= " ++ Haskell.show adjustedUtx
-
+            ledgerTx <- Contract.submitTxConstraintsWith @Void lookups tx
+            void $ Contract.awaitTxConfirmed $ getCardanoTxId ledgerTx
+            Contract.logInfo @Haskell.String $ printf "mintETT: Forged %s" (Haskell.show etVal)
+            Contract.logInfo @Haskell.String $ printf "mintETT: Token params %s" (Haskell.show mintParams)
 
 -- | TokenSchema type is defined and used by the PAB Contracts
-type TokenSchema = Contract.Endpoint "mintNFT" (RedeemerParams, TokenParams)
+type TokenSchema = Contract.Endpoint "mintETT" (RedeemerParams, TokenParams)
 
 useEndpoint :: Contract.Contract () TokenSchema T.Text ()
 useEndpoint = forever
               $ Contract.handleError Contract.logError
               $ Contract.awaitPromise
-              $ Contract.endpoint @"mintNFT" $ \(rp, tp) -> mintNFTToken rp tp
+              $ Contract.endpoint @"mintETT" $ \(rp, tp) -> mintETToken rp tp
 
 

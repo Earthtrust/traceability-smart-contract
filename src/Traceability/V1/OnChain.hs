@@ -12,29 +12,24 @@
 module Traceability.V1.OnChain 
     (
       minAda
-    , nftCurSymbol
-    , nftPolicy
-    , nftTokenValue
-    , typedLockTokenValidator
-    , lockTokenValidator
+    , etCurSymbol
+    , etPolicy
+    , etTokenValue
     ) where
 
-import           Traceability.V1.Types              (LockTokenValParams(..), NFTMintPolicyParams(..), 
+import           Traceability.V1.Types              (ETMintPolicyParams(..), 
                                                      MintPolicyRedeemer(..))
-import           Ledger                             (mkMintingPolicyScript, ScriptContext(..), scriptCurrencySymbol, 
+import           Ledger                             (mkMintingPolicyScript, ScriptContext(..), 
+                                                     scriptCurrencySymbol, 
                                                      TxInfo(..))
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
-import qualified Ledger.Address as Address          (Address, pubKeyHashAddress)
-import qualified Ledger.Scripts as Scripts          (mkValidatorScript, Validator)                                                  
+import qualified Ledger.Address as Address          (Address, pubKeyHashAddress)                                                 
 import qualified Ledger.Tx as Tx                    (TxOut(..))
-import qualified Ledger.Typed.Scripts.Validators as Validators (unsafeMkTypedValidator)
-import qualified Ledger.Typed.TypeUtils as TypeUtils (Any)
-import qualified Ledger.Typed.Scripts as TScripts   (MintingPolicy, TypedValidator, validatorScript, 
-                                                     wrapMintingPolicy)
-import qualified Ledger.Value as Value              (CurrencySymbol, flattenValue, singleton, TokenName(..), Value)
-import           Plutus.V1.Ledger.Api as Ledger     (unsafeFromBuiltinData)
+import qualified Ledger.Typed.Scripts as TScripts   (MintingPolicy, wrapMintingPolicy)
+import qualified Ledger.Value as Value              (CurrencySymbol, flattenValue, singleton, 
+                                                     TokenName(..), Value)
 import qualified PlutusTx                           (applyCode, compile, liftCode)
-import           PlutusTx.Prelude                   (Bool(..), BuiltinData, check,  
+import           PlutusTx.Prelude                   (Bool(..),  
                                                      divide, Integer, Maybe(..), otherwise, 
                                                      traceIfFalse, (&&), (==), ($), (-), (*))
 
@@ -56,16 +51,16 @@ validOutputs scriptAddr txVal (x:xs)
     | otherwise = validOutputs scriptAddr txVal xs
 
 
--- | mkNFTPolicy is the minting policy is for creating the order token NFT when
+-- | mkETPolicy is the minting policy is for creating an Earthtrust order token when
 --   an order is submitted.
-{-# INLINABLE mkNFTPolicy #-}
-mkNFTPolicy :: NFTMintPolicyParams -> MintPolicyRedeemer -> ScriptContext -> Bool
-mkNFTPolicy params (MintPolicyRedeemer polarity orderId adaAmount) ctx = 
+{-# INLINABLE mkETPolicy #-}
+mkETPolicy :: ETMintPolicyParams -> MintPolicyRedeemer -> ScriptContext -> Bool
+mkETPolicy params (MintPolicyRedeemer polarity adaAmount) ctx = 
 
     case polarity of
-        True ->    traceIfFalse "NFTP1" checkMintedAmount
-                && traceIfFalse "NFTP2" checkMerchantOutput 
-                && traceIfFalse "NFTP3" checkDonorOutput 
+        True ->    traceIfFalse "ETP1" checkMintedAmount
+                && traceIfFalse "ETP2" checkMerchantOutput 
+                && traceIfFalse "ETP3" checkDonorOutput 
                 
         False ->   False   -- no burning allowed
 
@@ -74,16 +69,19 @@ mkNFTPolicy params (MintPolicyRedeemer polarity orderId adaAmount) ctx =
     info = scriptContextTxInfo ctx  
 
     split :: Integer
-    split = nftSplit params
+    split = etpSplit params
+
+    tokenName :: Value.TokenName
+    tokenName = etpTokenName params
 
     merchantAddress :: Address.Address
-    merchantAddress = Address.pubKeyHashAddress (nftMerchantPkh params) Nothing
+    merchantAddress = Address.pubKeyHashAddress (etpMerchantPkh params) Nothing
 
     merchantAmount :: Value.Value
     merchantAmount = Ada.lovelaceValueOf (divide (adaAmount * split) 100)
 
     donorAddress :: Address.Address
-    donorAddress = Address.pubKeyHashAddress (nftDonorPkh params) Nothing
+    donorAddress = Address.pubKeyHashAddress (etpDonorPkh params) Nothing
 
     donorAmount :: Value.Value
     donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
@@ -92,7 +90,7 @@ mkNFTPolicy params (MintPolicyRedeemer polarity orderId adaAmount) ctx =
     -- Check that there is only 1 token minted
     checkMintedAmount :: Bool
     checkMintedAmount = case Value.flattenValue (txInfoMint info) of
-        [(_, tn', amt)] -> tn' == orderId && amt == 1
+        [(_, tn', amt)] -> tn' == tokenName && amt == 1
         _               -> False
           
     -- | Check that both the split amount value is correct and at the correct
@@ -107,54 +105,21 @@ mkNFTPolicy params (MintPolicyRedeemer polarity orderId adaAmount) ctx =
 
 
 -- | Wrap the minting policy using the boilerplate template haskell code
-nftPolicy :: NFTMintPolicyParams -> TScripts.MintingPolicy
-nftPolicy mpParams = mkMintingPolicyScript $
-    $$(PlutusTx.compile [|| \mpParams' -> TScripts.wrapMintingPolicy $ mkNFTPolicy mpParams' ||])
+etPolicy :: ETMintPolicyParams -> TScripts.MintingPolicy
+etPolicy mpParams = mkMintingPolicyScript $
+    $$(PlutusTx.compile [|| \mpParams' -> TScripts.wrapMintingPolicy $ mkETPolicy mpParams' ||])
     `PlutusTx.applyCode`
     PlutusTx.liftCode mpParams
 
 
 -- | Provide the currency symbol of the minting policy which requires MintPolicyParams
 --   as a parameter to the minting policy
-{-# INLINABLE nftCurSymbol #-}
-nftCurSymbol :: NFTMintPolicyParams -> Value.CurrencySymbol
-nftCurSymbol mpParams = scriptCurrencySymbol $ nftPolicy mpParams 
+{-# INLINABLE etCurSymbol #-}
+etCurSymbol :: ETMintPolicyParams -> Value.CurrencySymbol
+etCurSymbol mpParams = scriptCurrencySymbol $ etPolicy mpParams 
 
 -- | Return the value of the nftToken
-{-# INLINABLE nftTokenValue #-}
-nftTokenValue :: Value.CurrencySymbol -> Value.TokenName -> Value.Value
-nftTokenValue cs' tn' = Value.singleton cs' tn' 1
-
-
--- | Always Fail validator to lock order token
-{-# INLINABLE mkLockTokenValidator #-}
-mkLockTokenValidator :: LockTokenValParams -> BuiltinData -> BuiltinData -> BuiltinData -> Bool
-mkLockTokenValidator _ _ _ _ = False
-
-
--- | Creating a wrapper around traceability validator for 
---   performance improvements by not using a typed validator
-{-# INLINABLE wrapLockTokenValidator #-}
-wrapLockTokenValidator :: BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> ()
-wrapLockTokenValidator params dat red ctx =
-   check $ mkLockTokenValidator (unsafeFromBuiltinData params) (unsafeFromBuiltinData dat) (unsafeFromBuiltinData red) (unsafeFromBuiltinData ctx)
-
-
-untypedLockTokenValidator :: BuiltinData -> Scripts.Validator
-untypedLockTokenValidator params = Scripts.mkValidatorScript $
-    $$(PlutusTx.compile [|| wrapLockTokenValidator ||])
-    `PlutusTx.applyCode`
-    PlutusTx.liftCode params
-    
-
--- | We need a typedValidator for offchain mkTxConstraints, so 
--- created it using the untyped validator
-typedLockTokenValidator :: BuiltinData -> TScripts.TypedValidator TypeUtils.Any
-typedLockTokenValidator params =
-  Validators.unsafeMkTypedValidator $ untypedLockTokenValidator params
-
-
-lockTokenValidator :: BuiltinData -> Scripts.Validator
-lockTokenValidator params = TScripts.validatorScript $ typedLockTokenValidator params
-
+{-# INLINABLE etTokenValue #-}
+etTokenValue :: Value.CurrencySymbol -> Value.TokenName -> Value.Value
+etTokenValue cs' tn' = Value.singleton cs' tn' 1
 

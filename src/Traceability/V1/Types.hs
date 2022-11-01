@@ -8,8 +8,7 @@
 module Traceability.V1.Types 
 (
      MintPolicyRedeemer(..)
-   , NFTMintPolicyParams(..)
-   , LockTokenValParams(..)
+   , ETMintPolicyParams(..)
 
 )where
 
@@ -24,7 +23,6 @@ import qualified    Prelude as Haskell                  (Show)
 data MintPolicyRedeemer = MintPolicyRedeemer
     { 
       mpPolarity                  :: !Bool              -- True = Mint, False = Burn
-    , mpOrderId                   :: !Value.TokenName   -- The order number
     , mpAdaAmount                 :: !Integer           -- The total amount of the order 
     } deriving Haskell.Show
 
@@ -34,23 +32,15 @@ PlutusTx.makeLift ''MintPolicyRedeemer
 
 -- | The NFT minting policy params passes parameters 
 --   into the minting poicy which will make the NFT policy unique
-data NFTMintPolicyParams = NFTMintPolicyParams
+data ETMintPolicyParams = ETMintPolicyParams
     { 
-      nftVersion                 :: !Integer  
-    , nftSplit                   :: !Integer
-    , nftMerchantPkh             :: !Address.PaymentPubKeyHash
-    , nftDonorPkh                :: !Address.PaymentPubKeyHash
+      etpVersion                 :: !Integer  
+    , etpSplit                   :: !Integer
+    , etpMerchantPkh             :: !Address.PaymentPubKeyHash
+    , etpDonorPkh                :: !Address.PaymentPubKeyHash
+    , etpTokenName               :: !Value.TokenName
     } deriving Haskell.Show
 
-PlutusTx.makeIsDataIndexed ''NFTMintPolicyParams [('NFTMintPolicyParams,0)] 
-PlutusTx.makeLift ''NFTMintPolicyParams
+PlutusTx.makeIsDataIndexed ''ETMintPolicyParams [('ETMintPolicyParams,0)] 
+PlutusTx.makeLift ''ETMintPolicyParams
 
--- | ValParams is used to pass the admin pkh, NFT & traceability token names as a parameter to the 
---   traceability validator script
-data LockTokenValParams = LockTokenValParams
-    {   
-      ltvOrderId                 :: !Value.TokenName 
-    } deriving Haskell.Show
-
-PlutusTx.makeIsDataIndexed ''LockTokenValParams [('LockTokenValParams,0)] 
-PlutusTx.makeLift ''LockTokenValParams

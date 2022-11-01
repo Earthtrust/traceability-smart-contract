@@ -76,7 +76,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) $ show rp1
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h1 "mintNFT" (rp1, tp)
+    void $ Simulator.callEndpointOnInstance h1 "mintETT" (rp1, tp)
 
     Simulator.waitNSlots 5  
 
@@ -97,7 +97,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) $ show rp2
     --Simulator.logString @(Builtin Contracts) "Press return to continue"
     --void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h2 "mintNFT" (rp2, tp)
+    void $ Simulator.callEndpointOnInstance h2 "mintETT" (rp2, tp)
 
     Simulator.waitNSlots 5   
 
@@ -118,12 +118,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) $ show rp3
     --Simulator.logString @(Builtin Contracts) "Press return to continue"
     --void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h3 "mintNFT" (rp3, tp)
+    void $ Simulator.callEndpointOnInstance h3 "mintETT" (rp3, tp)
 
     Simulator.waitNSlots 5    
 
-    balances_nft1 <- Simulator.currentBalances
-    Simulator.logBalances @(Builtin Contracts) balances_nft1
+    balances_et1 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et1
 
 
     ------------------------------------------------------------------------------------------------------
@@ -149,12 +149,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h4 "mintNFT" (rp4, tp)
+    void $ Simulator.callEndpointOnInstance h4 "mintETT" (rp4, tp)
 
     Simulator.waitNSlots 5    
 
-    balances_nft2 <- Simulator.currentBalances
-    Simulator.logBalances @(Builtin Contracts) balances_nft2
+    balances_et2 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et2
 
 
     ------------------------------------------------------------------------------------------------------
@@ -180,12 +180,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h5 "mintNFT" (rp5, tp)
+    void $ Simulator.callEndpointOnInstance h5 "mintETT" (rp5, tp)
 
     Simulator.waitNSlots 5    
 
-    balances_nft3 <- Simulator.currentBalances
-    Simulator.logBalances @(Builtin Contracts) balances_nft3
+    balances_et3 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et3
 
 
     ------------------------------------------------------------------------------------------------------
@@ -211,12 +211,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h6 "mintNFT" (rp6, tp)
+    void $ Simulator.callEndpointOnInstance h6 "mintETT" (rp6, tp)
 
     Simulator.waitNSlots 5    
 
-    balances_nft4 <- Simulator.currentBalances
-    Simulator.logBalances @(Builtin Contracts) balances_nft4
+    balances_et4 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et4
 
     shutdown
 
