@@ -20,20 +20,20 @@ module Traceability.V1.OnChain
 
 import           Data.Aeson                         (FromJSON, ToJSON)
 import           GHC.Generics                       (Generic)
-import           Ledger                             (ScriptContext(..), scriptCurrencySymbol, 
-                                                     TxInfo(..),  txSignedBy, TxId(getTxId ))
+import           Ledger                             (ScriptContext(..), TxInfo(..),  txSignedBy, )
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
 import qualified Ledger.Address as Address          (Address, PaymentPubKeyHash(..), pubKeyHashAddress)
-import qualified Ledger.Contexts as Contexts        (spendsOutput, TxOut)
-import qualified Ledger.Scripts as Scripts          (Datum(..), DatumHash, mkValidatorScript, Script, Validator, ValidatorHash, validatorHash)                                                  
-import qualified Ledger.Tx as Tx                    (TxOut(..), TxOutRef(..))
+import qualified Ledger.Scripts as Scripts          (mkValidatorScript, Script, Validator, ValidatorHash)                                                  
+import qualified Ledger.Tx as Tx                    (TxOut(..))
 import qualified Ledger.Typed.Scripts.Validators as Validators (unsafeMkTypedValidator)
 import qualified Ledger.Typed.TypeUtils as TypeUtils (Any)
 import qualified Ledger.Typed.Scripts as TScripts   (TypedValidator, validatorScript, validatorHash)
-import qualified Ledger.Value as Value              (flattenValue, singleton, TokenName(..), Value)
+import qualified Ledger.Value as Value              (Value)
 import           Plutus.V1.Ledger.Api as Ledger     (unsafeFromBuiltinData, unValidatorScript)
-import qualified PlutusTx                           (applyCode, compile, fromBuiltinData, liftCode, makeIsDataIndexed, makeLift)
-import           PlutusTx.Prelude                   (Bool(..), BuiltinByteString, BuiltinData, check, divide, find, Integer, Maybe(..),otherwise, traceIfFalse, (&&), (==), ($), (<=), (>=), (<>), (<$>), (-), (*), (+))
+import qualified PlutusTx                           (applyCode, compile, liftCode, makeIsDataIndexed, makeLift)
+import           PlutusTx.Prelude                   (Bool(..), BuiltinData, check, divide, Integer, 
+                                                     Maybe(..),otherwise, traceIfFalse, (&&), (==), 
+                                                     ($), (*), (-))
 import qualified Prelude as Haskell                 (Show)
 import           Traceability.V1.Types              (ETValidatorParams(..))
 
@@ -41,10 +41,7 @@ import           Traceability.V1.Types              (ETValidatorParams(..))
 -- On Chain Code
 ------------------------------------------------------------------------
 
-
--- | ETDatum is used to record the amount of Littercoin minted and the amount
---   of Ada locked at the smart contract.  This is then used during Littercoin
---   burning to payout the corresponding amount of Ada per Littercoin to the merchant.
+-- | ETDatum is used to record the total amount of the order
 data ETDatum = ETDatum
     {   etdAmount           :: Integer                                                                                                             
     } deriving (Haskell.Show, Generic, FromJSON, ToJSON)
@@ -70,7 +67,7 @@ mkETValidator :: ETValidatorParams -> ETDatum -> () -> ScriptContext -> Bool
 mkETValidator params dat _ ctx = 
     traceIfFalse "ETV1" checkMerchantOutput 
     && traceIfFalse "ETV2" checkDonorOutput 
-    -- check that must be signed by admin
+    && traceIfFalse "ETV3" signedByAdmin
                 
   where
     info :: TxInfo
@@ -93,6 +90,10 @@ mkETValidator params dat _ ctx =
 
     donorAmount :: Value.Value
     donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
+
+    -- | Admin signature required to run the smart contract
+    signedByAdmin :: Bool
+    signedByAdmin =  txSignedBy info $ Address.unPaymentPubKeyHash (etvAdminPkh params)
 
     -- | Check that both the split amount value is correct and at the correct
     --   address for the merchant     

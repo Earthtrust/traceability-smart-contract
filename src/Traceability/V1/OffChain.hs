@@ -17,31 +17,27 @@ module Traceability.V1.OffChain
 import           Control.Lens                       (review)
 import           Control.Monad                      (forever)
 import           Data.Aeson                         (FromJSON, ToJSON)
-import qualified Data.Map as Map                    (singleton, toList, keys)
-import           Data.Monoid                        (Last (..))
+import qualified Data.Map as Map                    (singleton, toList)
 import           Data.Text as T                     (Text)
-import           Data.Void                          (Void)
 import           GHC.Generics                       (Generic)
-import qualified Plutus.Contract as Contract        (AsContractError (_ConstraintResolutionContractError), awaitPromise, awaitTxConfirmed, Contract, Endpoint, endpoint, handleError, logError, 
-                                                    logInfo, mapError, select, submitTxConstraintsWith, tell, throwError, type (.\/), utxosAt)
+import qualified Plutus.Contract as Contract        (AsContractError (_ConstraintResolutionContractError), 
+                                                     awaitPromise, Contract, Endpoint, endpoint, handleError, 
+                                                     logError, 
+                                                    logInfo, mapError, select, throwError, type (.\/), utxosAt)
 import           PlutusTx                           (fromBuiltinData, toBuiltinData)
-import           PlutusTx.Prelude                   (Bool(..), BuiltinByteString, Integer, Maybe (..), ($))
-import           Ledger                             (getCardanoTxId)
+import           PlutusTx.Prelude                   (Integer, Maybe (..), ($))
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
-import           Ledger.Address as Address          (PaymentPubKeyHash(..), pubKeyHashAddress, scriptHashAddress)
-import           Ledger.Constraints as Constraints  (adjustUnbalancedTx, mintingPolicy, mustMintValueWithRedeemer, mustBeSignedBy, mustPayToPubKey, mustPayToTheScript, mustSpendPubKeyOutput, mustSpendScriptOutput, otherScript, typedValidatorLookups, unspentOutputs)
+import           Ledger.Address as Address          (PaymentPubKeyHash(..), scriptHashAddress)
+import           Ledger.Constraints as Constraints  (adjustUnbalancedTx, mustBeSignedBy, mustPayToPubKey, 
+                                                     mustPayToTheScript, mustSpendScriptOutput, otherScript, 
+                                                     typedValidatorLookups, unspentOutputs)
 import           Ledger.Scripts as Scripts          (Datum(..), Redeemer(..))
-import qualified Ledger.Tx as Tx                    (ChainIndexTxOut (_ciTxOutValue,_ciTxOutDatum), TxOutRef(..))
-import           Ledger.TxId as TxId                (TxId(..))  
-import           Ledger.Value as Value              (CurrencySymbol, singleton, split, TokenName(..), valueOf)
+import qualified Ledger.Tx as Tx                    (ChainIndexTxOut (_ciTxOutDatum), TxOutRef(..))
 import           Playground.Contract as Playground  (ToSchema)
 import           Plutus.Contract.Request as Request (mkTxContract, submitTxConfirmed, ownPaymentPubKeyHash)
-import           Plutus.Contract.Wallet as Wallet   (getUnspentOutput)
-import           PlutusPrelude                      (void)
-import           PlutusTx.Prelude                   (divide, sha2_256, (+), (-), (++), (==), (*))
-import qualified Prelude as Haskell                 (Either(..), return, Semigroup ((<>)), Show (..), String)
-import           Text.Printf                        (printf)
-import           Traceability.V1.OnChain            (ETDatum(..), etHash, etValidator, typedETValidator, untypedETValidator)
+import           PlutusTx.Prelude                   (divide, (-), (++), (*))
+import qualified Prelude as Haskell                 (Either(..), return, Semigroup ((<>)), Show (..))
+import           Traceability.V1.OnChain            (ETDatum(..), etHash, etValidator, typedETValidator)
 import           Traceability.V1.Types              (ETValidatorParams(..))
 
 
@@ -52,6 +48,7 @@ data ETParams = ETParams
     , etpSplit                       :: !Integer
     , etpMerchantPkh                 :: !Address.PaymentPubKeyHash
     , etpDonorPkh                    :: !Address.PaymentPubKeyHash
+    , etpAdminPkh                    :: !Address.PaymentPubKeyHash
     , testAmount                     :: !Integer
     , testSplit                      :: !Integer
     , testMerchantPkh                :: !Address.PaymentPubKeyHash
@@ -84,6 +81,7 @@ lockAdaTx etp = do
             ,   etvSplit          = etpSplit etp
             ,   etvMerchantPkh    = etpMerchantPkh etp
             ,   etvDonorPkh       = etpDonorPkh etp
+            ,   etvAdminPkh       = etpAdminPkh etp
             }
         adaAmount = testAmount etp
         etDatum = ETDatum
@@ -109,6 +107,7 @@ unLockAdaTx etp = do
             ,   etvSplit          = etpSplit etp
             ,   etvMerchantPkh    = etpMerchantPkh etp
             ,   etvDonorPkh       = etpDonorPkh etp
+            ,   etvAdminPkh       = etpAdminPkh etp
             }
         
     (oref, o, etd@ETDatum{}) <- findETDatum etvParams
@@ -118,9 +117,9 @@ unLockAdaTx etp = do
 
     ownPkh <- Request.ownPaymentPubKeyHash
     let adaAmount = testAmount etp
-        split = testSplit etp
-        merchantAmount = divide (adaAmount * split) 100
-        donorAmount = divide (adaAmount * (100 - split)) 100
+        splitAmount = testSplit etp
+        merchantAmount = divide (adaAmount * splitAmount) 100
+        donorAmount = divide (adaAmount * (100 - splitAmount)) 100
         red = Scripts.Redeemer $ PlutusTx.toBuiltinData ()
 
         lookups = Constraints.typedValidatorLookups (typedETValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
