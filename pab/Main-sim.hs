@@ -19,6 +19,10 @@ import qualified Plutus.PAB.Webserver.Server as PAB.Server
 import           PlutusTx.Prelude                       (BuiltinByteString)
 import           Wallet.Emulator.Wallet                 (knownWallet)
 
+
+adminPkh :: PaymentPubKeyHash
+adminPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
+
 merchantPkh :: PaymentPubKeyHash
 merchantPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 8)
 
@@ -37,13 +41,6 @@ main = void $ Simulator.runSimulationWith handlers $ do
         w3 = knownWallet 3
         w4 = knownWallet 4
         w5 = knownWallet 5
-        w6 = knownWallet 6
-        tp = TokenParams
-            {   tpVersion = 1 :: Integer
-            ,   tpSplit = 95 :: Integer
-            ,   tpMerchantPkh = merchantPkh
-            ,   tpDonorPkh = donorPkh
-            }
 
     --setLocaleEncoding utf8
     Simulator.logString @(Builtin Contracts) "Starting PAB webserver on port 8080"
@@ -57,166 +54,189 @@ main = void $ Simulator.runSimulationWith handlers $ do
     h1 <- Simulator.activateContract w1 UseContract
 
     ------------------------------------------------------------------------------------------------------
-    -- Test Case #1, mint multiple tokens at different addresses for each order number, with correct split
+    -- Test Case #1, lock order amount at earthtrust smart contract, and send the correct amount 
+    -- to merchant and donor 
     ------------------------------------------------------------------------------------------------------
      
-    let rp1 = RedeemerParams
-            {
-              rpPolarity = True                         -- Mint     
-            , rpOrderId = "123" :: BuiltinByteString    -- Order Id
-            , rpAdaAmount = 100000000 :: Integer        -- 100 Ada
-            , rpSplit = 95 :: Integer
-            , rpMerchantPkh = merchantPkh
-            , rpDonorPkh = donorPkh
-            }
+    let etp1 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 95
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                }
+
+
     Simulator.logString @(Builtin Contracts) "-----------------------------------------------------------------------"
-    Simulator.logString @(Builtin Contracts) "Test Case #1, mint multiple tokens at different address for each order number with correct split"
-    Simulator.logString @(Builtin Contracts) "Test Case #1, Order #123"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp1
+    Simulator.logString @(Builtin Contracts) "Test Case #1, send order amount total to earthtrust contract"
+    Simulator.logString @(Builtin Contracts) $ show etp1
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h1 "mintETT" (rp1, tp)
+    void $ Simulator.callEndpointOnInstance h1 "lock" etp1
 
     Simulator.waitNSlots 5  
-
-    h2 <- Simulator.activateContract w2 UseContract
-
-    let rp2 = RedeemerParams
-            {
-              rpPolarity = True                         -- Mint     
-            , rpOrderId = "124" :: BuiltinByteString    -- Order Id
-            , rpAdaAmount = 100000000 :: Integer        -- 100 Ada
-            , rpSplit = 95 :: Integer
-            , rpMerchantPkh = merchantPkh
-            , rpDonorPkh = donorPkh
-            }
-
-    Simulator.logString @(Builtin Contracts) "Test Case #1, Order #124"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp2
-    --Simulator.logString @(Builtin Contracts) "Press return to continue"
-    --void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h2 "mintETT" (rp2, tp)
-
-    Simulator.waitNSlots 5   
-
-    h3 <- Simulator.activateContract w3 UseContract   
-
-    let rp3 = RedeemerParams
-            {
-              rpPolarity = True                         -- Mint     
-            , rpOrderId = "125" :: BuiltinByteString    -- Order Id
-            , rpAdaAmount = 100000000 :: Integer        -- 100 Ada
-            , rpSplit = 95 :: Integer
-            , rpMerchantPkh = merchantPkh
-            , rpDonorPkh = donorPkh
-            }
-
-    Simulator.logString @(Builtin Contracts) "Test Case #1, Order #125"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp3
-    --Simulator.logString @(Builtin Contracts) "Press return to continue"
-    --void $ liftIO getLine
-    void $ Simulator.callEndpointOnInstance h3 "mintETT" (rp3, tp)
-
-    Simulator.waitNSlots 5    
 
     balances_et1 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et1
 
-
-    ------------------------------------------------------------------------------------------------------
-    -- Test Case #2, mint order token with incorrect split
-    ------------------------------------------------------------------------------------------------------
-    
-    h4 <- Simulator.activateContract w4 UseContract  
-
-    let rp4 = RedeemerParams
-            {
-              rpPolarity = True                        -- Mint     
-            , rpOrderId = "126" :: BuiltinByteString   -- Order Id
-            , rpAdaAmount = 100000000 :: Integer       -- 100 Ada
-            , rpSplit = 100 :: Integer
-            , rpMerchantPkh = merchantPkh
-            , rpDonorPkh = donorPkh
-            }
-
-    Simulator.logString @(Builtin Contracts) "-----------------------------------------------------------------------"
-    Simulator.logString @(Builtin Contracts) "Test Case #2, mint order token with incorrect split"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp4
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h4 "mintETT" (rp4, tp)
 
-    Simulator.waitNSlots 5    
+    h2 <- Simulator.activateContract w2 UseContract
+
+    let etp2 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 95
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                }
+
+    Simulator.logString @(Builtin Contracts) "Test Case #1 unlock Ada amount at smart contract for correct amount"
+    Simulator.logString @(Builtin Contracts) $ show etp2
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance h2 "unlock" etp2
+
+    Simulator.waitNSlots 5   
 
     balances_et2 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et2
 
 
     ------------------------------------------------------------------------------------------------------
-    -- Test Case #3, send funds to incorrect merchant wallet
+    -- Test Case #2, lock order amount at earthtrust smart contract and send incorrect amount
+    -- to merchant and donor
     ------------------------------------------------------------------------------------------------------
+     
+    let etp1 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 100
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                }
 
-    h5 <- Simulator.activateContract w5 UseContract
-
-    let rp5 = RedeemerParams
-            {
-              rpPolarity = True                        -- Mint     
-            , rpOrderId = "127" :: BuiltinByteString   -- Order Id
-            , rpAdaAmount = 100000000 :: Integer       -- 100 Ada
-            , rpSplit = 95 :: Integer
-            , rpMerchantPkh = fraudPkh
-            , rpDonorPkh = donorPkh
-            }
 
     Simulator.logString @(Builtin Contracts) "-----------------------------------------------------------------------"
-    Simulator.logString @(Builtin Contracts) "Test Case #3, send funds to incorrect merchant wallet"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp5
+    Simulator.logString @(Builtin Contracts) "Test Case #2, send order amount total to earthtrust contract"
+    Simulator.logString @(Builtin Contracts) $ show etp1
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance h1 "lock" etp1
+
+    Simulator.waitNSlots 5  
+
+    balances_et1 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et1
+
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h5 "mintETT" (rp5, tp)
 
-    Simulator.waitNSlots 5    
+    h2 <- Simulator.activateContract w2 UseContract
+
+    let etp2 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 100
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                }
+
+    Simulator.logString @(Builtin Contracts) "Test Case #2 unlock Ada amount at smart contract for incorrect amount"
+    Simulator.logString @(Builtin Contracts) $ show etp2
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance h2 "unlock" etp2
+
+    Simulator.waitNSlots 5   
+
+    balances_et2 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et2
+
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+
+    ------------------------------------------------------------------------------------------------------
+    -- Test Case #3, unlock order amount at earthtrust smart contract to incorrect donor address
+    ------------------------------------------------------------------------------------------------------
+   
+    h2 <- Simulator.activateContract w2 UseContract
+
+    let etp2 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 95
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = adminPkh
+                }
+
+    Simulator.logString @(Builtin Contracts) "Test Case #3 unlock Ada amount at smart contract to incorrect donor address"
+    Simulator.logString @(Builtin Contracts) $ show etp2
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance h2 "unlock" etp2
+
+    Simulator.waitNSlots 5   
 
     balances_et3 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et3
 
-
-    ------------------------------------------------------------------------------------------------------
-    -- Test Case #4, send funds to incorrect donor wallet
-    ------------------------------------------------------------------------------------------------------
-
-    h6 <- Simulator.activateContract w6 UseContract
-
-    let rp6 = RedeemerParams
-            {
-              rpPolarity = True                        -- Mint     
-            , rpOrderId = "128" :: BuiltinByteString   -- Order Id
-            , rpAdaAmount = 100000000 :: Integer       -- 100 Ada
-            , rpSplit = 95 :: Integer
-            , rpMerchantPkh = merchantPkh
-            , rpDonorPkh = fraudPkh
-            }
-
-    Simulator.logString @(Builtin Contracts) "-----------------------------------------------------------------------"
-    Simulator.logString @(Builtin Contracts) "Test Case #4, send funds to incorrect donor wallet"
-    Simulator.logString @(Builtin Contracts) $ show tp
-    Simulator.logString @(Builtin Contracts) $ show rp6
     Simulator.logString @(Builtin Contracts) "Press return to continue"
     void $ liftIO getLine
 
-    void $ Simulator.callEndpointOnInstance h6 "mintETT" (rp6, tp)
+    ------------------------------------------------------------------------------------------------------
+    -- Test Case #4, unlock order amount at earthtrust smart contract to incorrect merchant address
+    ------------------------------------------------------------------------------------------------------
+   
+    h2 <- Simulator.activateContract w2 UseContract
 
-    Simulator.waitNSlots 5    
+    let etp2 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , testAmount = 100000000
+                , testSplit = 95
+                , testMerchantPkh = adminPkh
+                , testDonorPkh = donorPkh
+                }
+
+    Simulator.logString @(Builtin Contracts) "Test Case #4 unlock Ada amount at smart contract to incorrect merchant address"
+    Simulator.logString @(Builtin Contracts) $ show etp2
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance h2 "unlock" etp2
+
+    Simulator.waitNSlots 5   
 
     balances_et4 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et4
+
 
     shutdown
 

@@ -7,8 +7,7 @@
 
 module Traceability.V1.Types 
 (
-     MintPolicyRedeemer(..)
-   , ETMintPolicyParams(..)
+   ETValidatorParams(..)
 
 )where
 
@@ -19,28 +18,18 @@ import              PlutusTx.Prelude                    (Bool(..), Integer)
 import qualified    Prelude as Haskell                  (Show)
 
 
--- | The mint policy reeemder indicates if the token is to be minted or burned
-data MintPolicyRedeemer = MintPolicyRedeemer
-    { 
-      mpPolarity                  :: !Bool              -- True = Mint, False = Burn
-    , mpAdaAmount                 :: !Integer           -- The total amount of the order 
-    } deriving Haskell.Show
-
-PlutusTx.makeIsDataIndexed ''MintPolicyRedeemer [('MintPolicyRedeemer,0)] 
-PlutusTx.makeLift ''MintPolicyRedeemer
 
 
 -- | The NFT minting policy params passes parameters 
 --   into the minting poicy which will make the NFT policy unique
-data ETMintPolicyParams = ETMintPolicyParams
+data ETValidatorParams = ETValidatorParams
     { 
-      etpVersion                 :: !Integer  
-    , etpSplit                   :: !Integer
-    , etpMerchantPkh             :: !Address.PaymentPubKeyHash
-    , etpDonorPkh                :: !Address.PaymentPubKeyHash
-    , etpTokenName               :: !Value.TokenName
+      etvVersion                 :: !Integer  
+    , etvSplit                   :: !Integer
+    , etvMerchantPkh             :: !Address.PaymentPubKeyHash
+    , etvDonorPkh                :: !Address.PaymentPubKeyHash
     } deriving Haskell.Show
 
-PlutusTx.makeIsDataIndexed ''ETMintPolicyParams [('ETMintPolicyParams,0)] 
-PlutusTx.makeLift ''ETMintPolicyParams
+PlutusTx.makeIsDataIndexed ''ETValidatorParams [('ETValidatorParams,0)] 
+PlutusTx.makeLift ''ETValidatorParams
 

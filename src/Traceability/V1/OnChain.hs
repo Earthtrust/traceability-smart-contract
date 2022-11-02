@@ -11,35 +11,47 @@
 
 module Traceability.V1.OnChain 
     (
-      minAda
-    , etCurSymbol
-    , etPolicy
-    , etTokenValue
+      ETDatum(..)
+    , etHash
+    , etValidator
+    , typedETValidator
+    , untypedETValidator
     ) where
 
-import           Traceability.V1.Types              (ETMintPolicyParams(..), 
-                                                     MintPolicyRedeemer(..))
-import           Ledger                             (mkMintingPolicyScript, ScriptContext(..), 
-                                                     scriptCurrencySymbol, 
-                                                     TxInfo(..))
+import           Data.Aeson                         (FromJSON, ToJSON)
+import           GHC.Generics                       (Generic)
+import           Ledger                             (ScriptContext(..), scriptCurrencySymbol, 
+                                                     TxInfo(..),  txSignedBy, TxId(getTxId ))
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
-import qualified Ledger.Address as Address          (Address, pubKeyHashAddress)                                                 
-import qualified Ledger.Tx as Tx                    (TxOut(..))
-import qualified Ledger.Typed.Scripts as TScripts   (MintingPolicy, wrapMintingPolicy)
-import qualified Ledger.Value as Value              (CurrencySymbol, flattenValue, singleton, 
-                                                     TokenName(..), Value)
-import qualified PlutusTx                           (applyCode, compile, liftCode)
-import           PlutusTx.Prelude                   (Bool(..),  
-                                                     divide, Integer, Maybe(..), otherwise, 
-                                                     traceIfFalse, (&&), (==), ($), (-), (*))
+import qualified Ledger.Address as Address          (Address, PaymentPubKeyHash(..), pubKeyHashAddress)
+import qualified Ledger.Contexts as Contexts        (spendsOutput, TxOut)
+import qualified Ledger.Scripts as Scripts          (Datum(..), DatumHash, mkValidatorScript, Script, Validator, ValidatorHash, validatorHash)                                                  
+import qualified Ledger.Tx as Tx                    (TxOut(..), TxOutRef(..))
+import qualified Ledger.Typed.Scripts.Validators as Validators (unsafeMkTypedValidator)
+import qualified Ledger.Typed.TypeUtils as TypeUtils (Any)
+import qualified Ledger.Typed.Scripts as TScripts   (TypedValidator, validatorScript, validatorHash)
+import qualified Ledger.Value as Value              (flattenValue, singleton, TokenName(..), Value)
+import           Plutus.V1.Ledger.Api as Ledger     (unsafeFromBuiltinData, unValidatorScript)
+import qualified PlutusTx                           (applyCode, compile, fromBuiltinData, liftCode, makeIsDataIndexed, makeLift)
+import           PlutusTx.Prelude                   (Bool(..), BuiltinByteString, BuiltinData, check, divide, find, Integer, Maybe(..),otherwise, traceIfFalse, (&&), (==), ($), (<=), (>=), (<>), (<$>), (-), (*), (+))
+import qualified Prelude as Haskell                 (Show)
+import           Traceability.V1.Types              (ETValidatorParams(..))
 
 ------------------------------------------------------------------------
 -- On Chain Code
 ------------------------------------------------------------------------
 
-{-# INLINABLE minAda #-}
-minAda :: Value.Value
-minAda = Ada.lovelaceValueOf 2000000
+
+-- | ETDatum is used to record the amount of Littercoin minted and the amount
+--   of Ada locked at the smart contract.  This is then used during Littercoin
+--   burning to payout the corresponding amount of Ada per Littercoin to the merchant.
+data ETDatum = ETDatum
+    {   etdAmount           :: Integer                                                                                                             
+    } deriving (Haskell.Show, Generic, FromJSON, ToJSON)
+
+PlutusTx.makeIsDataIndexed ''ETDatum [('ETDatum, 0)]
+PlutusTx.makeLift ''ETDatum
+
 
                             
 -- | Check that the value is locked at an address for the provided outputs
@@ -51,48 +63,37 @@ validOutputs scriptAddr txVal (x:xs)
     | otherwise = validOutputs scriptAddr txVal xs
 
 
--- | mkETPolicy is the minting policy is for creating an Earthtrust order token when
+-- | mkETValidator is the minting policy is for creating an Earthtrust order token when
 --   an order is submitted.
-{-# INLINABLE mkETPolicy #-}
-mkETPolicy :: ETMintPolicyParams -> MintPolicyRedeemer -> ScriptContext -> Bool
-mkETPolicy params (MintPolicyRedeemer polarity adaAmount) ctx = 
-
-    case polarity of
-        True ->    traceIfFalse "ETP1" checkMintedAmount
-                && traceIfFalse "ETP2" checkMerchantOutput 
-                && traceIfFalse "ETP3" checkDonorOutput 
+{-# INLINABLE mkETValidator #-}
+mkETValidator :: ETValidatorParams -> ETDatum -> () -> ScriptContext -> Bool
+mkETValidator params dat _ ctx = 
+    traceIfFalse "ETV1" checkMerchantOutput 
+    && traceIfFalse "ETV2" checkDonorOutput 
+    -- check that must be signed by admin
                 
-        False ->   False   -- no burning allowed
-
   where
     info :: TxInfo
-    info = scriptContextTxInfo ctx  
+    info = scriptContextTxInfo ctx
 
     split :: Integer
-    split = etpSplit params
+    split = etvSplit params
 
-    tokenName :: Value.TokenName
-    tokenName = etpTokenName params
+    adaAmount :: Integer
+    adaAmount = etdAmount dat
 
     merchantAddress :: Address.Address
-    merchantAddress = Address.pubKeyHashAddress (etpMerchantPkh params) Nothing
+    merchantAddress = Address.pubKeyHashAddress (etvMerchantPkh params) Nothing
 
     merchantAmount :: Value.Value
     merchantAmount = Ada.lovelaceValueOf (divide (adaAmount * split) 100)
 
     donorAddress :: Address.Address
-    donorAddress = Address.pubKeyHashAddress (etpDonorPkh params) Nothing
+    donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing
 
     donorAmount :: Value.Value
     donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
 
-
-    -- Check that there is only 1 token minted
-    checkMintedAmount :: Bool
-    checkMintedAmount = case Value.flattenValue (txInfoMint info) of
-        [(_, tn', amt)] -> tn' == tokenName && amt == 1
-        _               -> False
-          
     -- | Check that both the split amount value is correct and at the correct
     --   address for the merchant     
     checkMerchantOutput :: Bool
@@ -104,22 +105,36 @@ mkETPolicy params (MintPolicyRedeemer polarity adaAmount) ctx =
     checkDonorOutput = validOutputs donorAddress donorAmount (txInfoOutputs info)
 
 
--- | Wrap the minting policy using the boilerplate template haskell code
-etPolicy :: ETMintPolicyParams -> TScripts.MintingPolicy
-etPolicy mpParams = mkMintingPolicyScript $
-    $$(PlutusTx.compile [|| \mpParams' -> TScripts.wrapMintingPolicy $ mkETPolicy mpParams' ||])
+-- | Creating a wrapper around littercoin validator for 
+--   performance improvements by not using a typed validator
+{-# INLINABLE wrapETValidator #-}
+wrapETValidator :: BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> ()
+wrapETValidator params dat red ctx =
+   check $ mkETValidator (unsafeFromBuiltinData params) (unsafeFromBuiltinData dat) (unsafeFromBuiltinData red) (unsafeFromBuiltinData ctx)
+
+
+untypedETValidator :: BuiltinData -> Scripts.Validator
+untypedETValidator params = Scripts.mkValidatorScript $
+    $$(PlutusTx.compile [|| wrapETValidator ||])
     `PlutusTx.applyCode`
-    PlutusTx.liftCode mpParams
+    PlutusTx.liftCode params
+    
+
+-- | We need a typedValidator for offchain mkTxConstraints, so 
+-- created it using the untyped validator
+typedETValidator :: BuiltinData -> TScripts.TypedValidator TypeUtils.Any
+typedETValidator params =
+  Validators.unsafeMkTypedValidator $ untypedETValidator params
 
 
--- | Provide the currency symbol of the minting policy which requires MintPolicyParams
---   as a parameter to the minting policy
-{-# INLINABLE etCurSymbol #-}
-etCurSymbol :: ETMintPolicyParams -> Value.CurrencySymbol
-etCurSymbol mpParams = scriptCurrencySymbol $ etPolicy mpParams 
+mkETScript :: BuiltinData -> Scripts.Script
+mkETScript params = unValidatorScript $ untypedETValidator params
 
--- | Return the value of the nftToken
-{-# INLINABLE etTokenValue #-}
-etTokenValue :: Value.CurrencySymbol -> Value.TokenName -> Value.Value
-etTokenValue cs' tn' = Value.singleton cs' tn' 1
+
+etValidator :: BuiltinData -> Scripts.Validator
+etValidator params = TScripts.validatorScript $ typedETValidator params
+
+
+etHash :: BuiltinData -> Scripts.ValidatorHash
+etHash params = TScripts.validatorHash $ typedETValidator params
 
