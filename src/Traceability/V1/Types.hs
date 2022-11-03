@@ -20,8 +20,8 @@ import qualified    Prelude as Haskell                  (Show)
 
 
 
--- | The NFT minting policy params passes parameters 
---   into the minting poicy which will make the NFT policy unique
+-- | The earthtrust validator parameters that are used to hard code
+--   key parameters into the earthtrust smart contract
 data ETValidatorParams = ETValidatorParams
     { 
       etvVersion                 :: !Integer  
