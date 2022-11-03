@@ -18,8 +18,6 @@ import              PlutusTx.Prelude                    (Integer)
 import qualified    Prelude as Haskell                  (Show)
 
 
-
-
 -- | The earthtrust validator parameters that are used to hard code
 --   key parameters into the earthtrust smart contract
 data ETValidatorParams = ETValidatorParams
