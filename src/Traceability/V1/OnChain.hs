@@ -53,7 +53,6 @@ data ETDatum = ETDatum
 PlutusTx.makeIsDataIndexed ''ETDatum [('ETDatum, 0)]
 PlutusTx.makeLift ''ETDatum
 
-
                             
 -- | Check that the value is locked at an address for the provided outputs
 {-# INLINABLE validOutputs #-}
@@ -90,9 +89,11 @@ mkETValidator params dat red ctx =
     case red of
         Spend -> traceIfFalse "ETV1" checkMerchantOutput 
                 && traceIfFalse "ETV2" checkDonorOutput 
-                && traceIfFalse "ETV3" signedByAdmin
-                && traceIfFalse "ETV4" checkInput  
-        Refund -> False
+                && traceIfFalse "ETV3" checkInput  
+                && traceIfFalse "ETV4" signedByAdmin
+        Refund amt -> (traceIfFalse "ETV5" $ checkRefundOutput amt)
+                && (traceIfFalse "ETV6" $ checkRefundInput amt)
+                && traceIfFalse "ETV7" signedByAdmin
                 
     where
         info :: TxInfo
@@ -116,6 +117,9 @@ mkETValidator params dat red ctx =
         donorAddress :: Address.Address
         donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing
 
+        refundAddress :: Address.Address
+        refundAddress = Address.pubKeyHashAddress (etdRefundAddr dat) Nothing
+
         donorAmount :: Value.Value
         donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
 
@@ -137,6 +141,16 @@ mkETValidator params dat red ctx =
         --   transaction
         checkInput :: Bool
         checkInput = validInput (Ada.lovelaceValueOf (adaAmount + serviceFee)) (txInfoInputs info)
+
+        -- | Checks that the amount in the datum matches the actual amount in the input
+        --   transaction
+        checkRefundInput :: Integer -> Bool
+        checkRefundInput refundAmt = validInput (Ada.lovelaceValueOf (refundAmt + serviceFee)) (txInfoInputs info)
+
+        -- | Check that the refund output contains the correct ada amount and
+        --   goes to the refund address
+        checkRefundOutput :: Integer -> Bool
+        checkRefundOutput refundAmt = validOutputs refundAddress (Ada.lovelaceValueOf refundAmt) (txInfoOutputs info)
 
 
 -- | Creating a wrapper around littercoin validator for 

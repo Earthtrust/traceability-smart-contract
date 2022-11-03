@@ -119,9 +119,9 @@ unLockAdaTx etp = do
             }
         
     (oref, o, etd@ETDatum{}) <- findETDatum etvParams
-    Contract.logInfo $ "lockTx: found utxo with datum= " ++ Haskell.show etd
-    Contract.logInfo $ "lockTx: found utxo oref= " ++ Haskell.show oref
-    Contract.logInfo $ "lockTx: hash= " ++ Haskell.show (etHash $ PlutusTx.toBuiltinData etvParams)
+    Contract.logInfo $ "unlockAdaTx: found utxo with datum= " ++ Haskell.show etd
+    Contract.logInfo $ "unlockAdaTx: found utxo oref= " ++ Haskell.show oref
+    Contract.logInfo $ "unlockAdaTx: hash= " ++ Haskell.show (etHash $ PlutusTx.toBuiltinData etvParams)
 
     ownPkh <- Request.ownPaymentPubKeyHash
     let adaAmount = etdAmount etd
@@ -145,18 +145,58 @@ unLockAdaTx etp = do
     Request.submitTxConfirmed adjustedUtx
 
 
+
+refundTx :: ETParams -> Contract.Contract () ETSchema T.Text ()
+refundTx etp = do
+
+    let etvParams = ETValidatorParams
+            {   
+                etvVersion        = etpVersion etp
+            ,   etvSplit          = etpSplit etp
+            ,   etvMerchantPkh    = etpMerchantPkh etp
+            ,   etvDonorPkh       = etpDonorPkh etp
+            ,   etvAdminPkh       = etpAdminPkh etp
+            }
+        
+    (oref, o, etd@ETDatum{}) <- findETDatum etvParams
+    Contract.logInfo $ "refundTx: found utxo with datum= " ++ Haskell.show etd
+    Contract.logInfo $ "refundTx: found utxo oref= " ++ Haskell.show oref
+    Contract.logInfo $ "refundTx: hash= " ++ Haskell.show (etHash $ PlutusTx.toBuiltinData etvParams)
+
+    ownPkh <- Request.ownPaymentPubKeyHash
+    let adaAmount = testAmount etp
+        serviceFee = etdServiceFee etd
+        red = Scripts.Redeemer $ PlutusTx.toBuiltinData $ Refund adaAmount 
+
+        lookups = Constraints.typedValidatorLookups (typedETValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
+                  Constraints.otherScript (etValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
+                  Constraints.unspentOutputs (Map.singleton oref o)
+        tx =      Constraints.mustPayToPubKey (testRefundPkh etp) (Ada.lovelaceValueOf adaAmount) Haskell.<> 
+                  Constraints.mustPayToPubKey (etpAdminPkh etp) (Ada.lovelaceValueOf serviceFee) Haskell.<> 
+                  Constraints.mustSpendScriptOutput oref red Haskell.<> 
+                  Constraints.mustBeSignedBy ownPkh
+
+    utx <- Contract.mapError (review Contract._ConstraintResolutionContractError) (Request.mkTxContract lookups tx)
+    let adjustedUtx = Constraints.adjustUnbalancedTx utx
+    Request.submitTxConfirmed adjustedUtx
+
+
+
 -- | ETSchema type is defined and used by the PAB Contracts
 type ETSchema = Contract.Endpoint "lock" (ETParams)
                 Contract..\/ Contract.Endpoint "unlock" (ETParams)
+                Contract..\/ Contract.Endpoint "refund" (ETParams)
 
 
 -- | The endpoints are called via the PAB simulator in the Main-sim.hs file in the app directory
 useEndpoint :: Contract.Contract () ETSchema Text ()
 useEndpoint = forever $ Contract.handleError Contract.logError $ Contract.awaitPromise $ 
                 lockTx `Contract.select`
-                unLockTx 
+                unLockTx `Contract.select`
+                refund
                    
     where
         lockTx = Contract.endpoint @"lock" $ \(tp) -> lockAdaTx tp 
         unLockTx = Contract.endpoint @"unlock" $ \(tp) -> unLockAdaTx tp
+        refund = Contract.endpoint @"refund" $ \(tp) -> refundTx tp
 

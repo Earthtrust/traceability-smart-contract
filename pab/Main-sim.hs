@@ -19,11 +19,14 @@ import qualified Plutus.PAB.Webserver.Server as PAB.Server
 import           Wallet.Emulator.Wallet                 (knownWallet)
 
 
+adminPkh :: PaymentPubKeyHash
+adminPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 1)
+
 buyerPkh :: PaymentPubKeyHash
 buyerPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
 
-adminPkh :: PaymentPubKeyHash
-adminPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
+--fraudPkh :: PaymentPubKeyHash
+--fraudPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 3)
 
 merchantPkh :: PaymentPubKeyHash
 merchantPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 8)
@@ -35,9 +38,9 @@ donorPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 9)
 main :: IO ()
 main = void $ Simulator.runSimulationWith handlers $ do
 
-    let w1 = knownWallet 1
-        w2 = knownWallet 2
-        w3 = knownWallet 3
+    let w1 = knownWallet 1  -- admin
+        w2 = knownWallet 2  -- buyer
+        w3 = knownWallet 3  -- fraud
 
 
     --setLocaleEncoding utf8
@@ -49,10 +52,9 @@ main = void $ Simulator.runSimulationWith handlers $ do
     void $ liftIO getLine
         
     Simulator.logString @(Builtin Contracts) "Initializing contract handle for wallet 1"
-    buyer <- Simulator.activateContract w1 UseContract
-    admin <- Simulator.activateContract w2 UseContract
+    admin <- Simulator.activateContract w1 UseContract
+    buyer <- Simulator.activateContract w2 UseContract
     fraud <- Simulator.activateContract w3 UseContract
-
 
     ------------------------------------------------------------------------------------------------------
     -- Test Case #1, lock order amount at earthtrust smart contract, and send the correct amount 
@@ -89,8 +91,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et1 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et1
 
-    Simulator.logString @(Builtin Contracts) "Press return to continue"
-    void $ liftIO getLine
+    Simulator.waitNSlots 1
 
     Simulator.logString @(Builtin Contracts) "Test Case #1 unlock Ada amount at smart contract for correct amount"
     Simulator.logString @(Builtin Contracts) $ show etp1
@@ -102,6 +103,8 @@ main = void $ Simulator.runSimulationWith handlers $ do
 
     balances_et2 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et2
+
+    Simulator.waitNSlots 1
 
 
     ------------------------------------------------------------------------------------------------------
@@ -139,8 +142,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et3 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et3
 
-    Simulator.logString @(Builtin Contracts) "Press return to continue"
-    void $ liftIO getLine
+    Simulator.waitNSlots 1
 
     Simulator.logString @(Builtin Contracts) "Test Case #2 unlock Ada amount at smart contract for incorrect amount"
     Simulator.logString @(Builtin Contracts) $ show etp2
@@ -153,8 +155,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et4 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et4
 
-    Simulator.logString @(Builtin Contracts) "Press return to continue"
-    void $ liftIO getLine
+    Simulator.waitNSlots 1
 
     ------------------------------------------------------------------------------------------------------
     -- Test Case #3, unlock order amount at earthtrust smart contract to incorrect donor address
@@ -189,8 +190,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et5 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et5
 
-    Simulator.logString @(Builtin Contracts) "Press return to continue"
-    void $ liftIO getLine
+    Simulator.waitNSlots 1
 
     ------------------------------------------------------------------------------------------------------
     -- Test Case #4, unlock order amount at earthtrust smart contract to incorrect merchant address
@@ -224,6 +224,8 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et6 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et6
 
+    Simulator.waitNSlots 1
+
     ------------------------------------------------------------------------------------------------------
     -- Test Case #5, unlock order amount at earthtrust smart contract not being admin
     ------------------------------------------------------------------------------------------------------
@@ -255,6 +257,8 @@ main = void $ Simulator.runSimulationWith handlers $ do
 
     balances_et7 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et7
+ 
+    Simulator.waitNSlots 1
 
     Simulator.logString @(Builtin Contracts) "Test Case #5 spend unspent utxo with admin"
     Simulator.logString @(Builtin Contracts) $ show etp5
@@ -297,7 +301,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et8 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et8
 
-    Simulator.waitNSlots 2
+    Simulator.waitNSlots 1
 
     Simulator.logString @(Builtin Contracts) "Test Case #6, unlock with incorrect datum value"
     Simulator.logString @(Builtin Contracts) $ show etp6
@@ -310,6 +314,43 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et9 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et9
 
+    Simulator.waitNSlots 1 
+
+    ------------------------------------------------------------------------------------------------------
+    -- Test Case #7, issue refund because incorrect Datum (or invalid/unuseable
+    -- merchant or donor wallet address)
+    ------------------------------------------------------------------------------------------------------
+
+    let etp7 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , etpAdminPkh = adminPkh 
+                , testAmount = 100000000
+                , datumAmount = 100000000
+                , testOrderId = "124"
+                , testSplit = 95
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
+                }
+
+
+    Simulator.logString @(Builtin Contracts) "Test Case #7, issue refund because incorrect Datum (or invalid/unusable merchant or donor wallet address)"
+    Simulator.logString @(Builtin Contracts) $ show etp7
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance admin "refund" etp7
+
+    Simulator.waitNSlots 5   
+
+    balances_et10 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et10
+
+    Simulator.waitNSlots 1
 
     shutdown
 

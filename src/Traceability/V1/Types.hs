@@ -38,8 +38,8 @@ PlutusTx.makeLift ''ETValidatorParams
 --   to add and remove Ada from the littercoin contract.   Also specify the amount 
 --   as well in the redeemer.
 data ETRedeemer = 
-       Spend     -- spend earthtrust locked Ada and send to merchant and donor 
-     | Refund    -- refund locked Ada to customer
+       Spend            -- spend earthtrust locked Ada and send to merchant and donor 
+     | Refund Integer   -- refund locked Ada to customer
 
     deriving Haskell.Show
 
