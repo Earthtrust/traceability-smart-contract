@@ -32,11 +32,11 @@ import qualified Ledger.Typed.Scripts as TScripts   (TypedValidator, validatorSc
 import qualified Ledger.Value as Value              (Value)
 import           Plutus.V1.Ledger.Api as Ledger     (unsafeFromBuiltinData, unValidatorScript)
 import qualified PlutusTx                           (applyCode, compile, liftCode, makeIsDataIndexed, makeLift)
-import           PlutusTx.Prelude                   (Bool(..), BuiltinData, check, divide, Integer, 
+import           PlutusTx.Prelude                   (Bool(..), BuiltinData, BuiltinByteString, check, divide, Integer, 
                                                      Maybe(..),otherwise, traceIfFalse, (&&), (==), 
-                                                     ($), (*), (-))
+                                                     ($), (*), (-), (+))
 import qualified Prelude as Haskell                 (Show)
-import           Traceability.V1.Types              (ETValidatorParams(..))
+import           Traceability.V1.Types              (ETRedeemer(..), ETValidatorParams(..))
 
 ------------------------------------------------------------------------
 -- On Chain Code
@@ -44,7 +44,10 @@ import           Traceability.V1.Types              (ETValidatorParams(..))
 
 -- | ETDatum is used to record the total amount of the order
 data ETDatum = ETDatum
-    {   etdAmount           :: Integer                                                                                                             
+    {   etdAmount           :: Integer 
+    ,   etdOrderId          :: BuiltinByteString
+    ,   etdServiceFee       :: Integer
+    ,   etdRefundAddr       :: !Address.PaymentPubKeyHash                                                                                                            
     } deriving (Haskell.Show, Generic, FromJSON, ToJSON)
 
 PlutusTx.makeIsDataIndexed ''ETDatum [('ETDatum, 0)]
@@ -82,53 +85,58 @@ validInput txVal (x:xs)
 -- | mkETValidator is the minting policy is for creating an Earthtrust order token when
 --   an order is submitted.
 {-# INLINABLE mkETValidator #-}
-mkETValidator :: ETValidatorParams -> ETDatum -> () -> ScriptContext -> Bool
-mkETValidator params dat _ ctx = 
-    traceIfFalse "ETV1" checkMerchantOutput 
-    && traceIfFalse "ETV2" checkDonorOutput 
-    && traceIfFalse "ETV3" signedByAdmin
-    && traceIfFalse "ETV4" checkInput
+mkETValidator :: ETValidatorParams -> ETDatum -> ETRedeemer -> ScriptContext -> Bool
+mkETValidator params dat red ctx = 
+    case red of
+        Spend -> traceIfFalse "ETV1" checkMerchantOutput 
+                && traceIfFalse "ETV2" checkDonorOutput 
+                && traceIfFalse "ETV3" signedByAdmin
+                && traceIfFalse "ETV4" checkInput  
+        Refund -> False
                 
-  where
-    info :: TxInfo
-    info = scriptContextTxInfo ctx
+    where
+        info :: TxInfo
+        info = scriptContextTxInfo ctx
 
-    split :: Integer
-    split = etvSplit params
+        split :: Integer
+        split = etvSplit params
 
-    adaAmount :: Integer
-    adaAmount = etdAmount dat
+        adaAmount :: Integer
+        adaAmount = etdAmount dat
 
-    merchantAddress :: Address.Address
-    merchantAddress = Address.pubKeyHashAddress (etvMerchantPkh params) Nothing
+        serviceFee :: Integer
+        serviceFee = etdServiceFee dat
 
-    merchantAmount :: Value.Value
-    merchantAmount = Ada.lovelaceValueOf (divide (adaAmount * split) 100)
+        merchantAddress :: Address.Address
+        merchantAddress = Address.pubKeyHashAddress (etvMerchantPkh params) Nothing
 
-    donorAddress :: Address.Address
-    donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing
+        merchantAmount :: Value.Value
+        merchantAmount = Ada.lovelaceValueOf (divide (adaAmount * split) 100)
 
-    donorAmount :: Value.Value
-    donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
+        donorAddress :: Address.Address
+        donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing
 
-    -- | Admin signature required to run the smart contract
-    signedByAdmin :: Bool
-    signedByAdmin =  txSignedBy info $ Address.unPaymentPubKeyHash (etvAdminPkh params)
+        donorAmount :: Value.Value
+        donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
 
-    -- | Check that both the split amount value is correct and at the correct
-    --   address for the merchant     
-    checkMerchantOutput :: Bool
-    checkMerchantOutput = validOutputs merchantAddress merchantAmount (txInfoOutputs info)
+        -- | Admin signature required to run the smart contract
+        signedByAdmin :: Bool
+        signedByAdmin =  txSignedBy info $ Address.unPaymentPubKeyHash (etvAdminPkh params)
 
-    -- | Check that both the split amount value is correct and at the correct
-    --   address for the donor  
-    checkDonorOutput :: Bool
-    checkDonorOutput = validOutputs donorAddress donorAmount (txInfoOutputs info)
+        -- | Check that both the split amount value is correct and at the correct
+        --   address for the merchant     
+        checkMerchantOutput :: Bool
+        checkMerchantOutput = validOutputs merchantAddress merchantAmount (txInfoOutputs info)
 
-    -- | Checks that the amount in the datum matches the actual amount in the input
-    --   transaction
-    checkInput :: Bool
-    checkInput = validInput (Ada.lovelaceValueOf adaAmount) (txInfoInputs info)
+        -- | Check that both the split amount value is correct and at the correct
+        --   address for the donor  
+        checkDonorOutput :: Bool
+        checkDonorOutput = validOutputs donorAddress donorAmount (txInfoOutputs info)
+
+        -- | Checks that the amount in the datum matches the actual amount in the input
+        --   transaction
+        checkInput :: Bool
+        checkInput = validInput (Ada.lovelaceValueOf (adaAmount + serviceFee)) (txInfoInputs info)
 
 
 -- | Creating a wrapper around littercoin validator for 

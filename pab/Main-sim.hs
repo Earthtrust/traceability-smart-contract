@@ -19,6 +19,9 @@ import qualified Plutus.PAB.Webserver.Server as PAB.Server
 import           Wallet.Emulator.Wallet                 (knownWallet)
 
 
+buyerPkh :: PaymentPubKeyHash
+buyerPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
+
 adminPkh :: PaymentPubKeyHash
 adminPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
 
@@ -65,9 +68,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 100000000
+                , testOrderId = "123"
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
 
@@ -112,9 +118,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 100000000
+                , testOrderId = "124"
                 , testSplit = 100
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
 
@@ -160,9 +169,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 100000000
+                , testOrderId = "123"
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = adminPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
     Simulator.logString @(Builtin Contracts) "Test Case #3 unlock Ada amount at smart contract to incorrect donor address"
@@ -193,9 +205,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 100000000
+                , testOrderId = "124"
                 , testSplit = 95
                 , testMerchantPkh = adminPkh
                 , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
     Simulator.logString @(Builtin Contracts) "Test Case #4 unlock Ada amount at smart contract to incorrect merchant address"
@@ -222,9 +237,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 100000000
+                , testOrderId = "124"
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
     Simulator.logString @(Builtin Contracts) "Test Case #5, unlock order amount at earthtrust smart contract not being admin"
@@ -248,7 +266,6 @@ main = void $ Simulator.runSimulationWith handlers $ do
     -- Test Case #6, unlock order amount with incorrect datum value
     ------------------------------------------------------------------------------------------------------
 
-
     Simulator.waitNSlots 5   
 
     let etp6 = ETParams
@@ -260,9 +277,12 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
                 , datumAmount = 50000000
+                , testOrderId = "123"
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
+                , testRefundPkh = buyerPkh
+                , testServiceFee = 500000
                 }
 
 
@@ -277,6 +297,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     balances_et8 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et8
 
+    Simulator.waitNSlots 2
 
     Simulator.logString @(Builtin Contracts) "Test Case #6, unlock with incorrect datum value"
     Simulator.logString @(Builtin Contracts) $ show etp6

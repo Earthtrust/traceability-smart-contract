@@ -7,7 +7,8 @@
 
 module Traceability.V1.Types 
 (
-   ETValidatorParams(..)
+    ETRedeemer(..)  
+  , ETValidatorParams(..)
 
 )where
 
@@ -32,4 +33,20 @@ data ETValidatorParams = ETValidatorParams
 
 PlutusTx.makeIsDataIndexed ''ETValidatorParams [('ETValidatorParams,0)] 
 PlutusTx.makeLift ''ETValidatorParams
+
+-- | The LCRedemeer used to indicate if the action is to mint or burn littercoin or
+--   to add and remove Ada from the littercoin contract.   Also specify the amount 
+--   as well in the redeemer.
+data ETRedeemer = 
+       Spend     -- spend earthtrust locked Ada and send to merchant and donor 
+     | Refund    -- refund locked Ada to customer
+
+    deriving Haskell.Show
+
+PlutusTx.makeIsDataIndexed
+  ''ETRedeemer
+  [ ('Spend, 0),
+    ('Refund, 1)
+  ]
+PlutusTx.makeLift ''ETRedeemer
 

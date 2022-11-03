@@ -35,10 +35,10 @@ import           Ledger.Scripts as Scripts          (Datum(..), Redeemer(..))
 import qualified Ledger.Tx as Tx                    (ChainIndexTxOut (_ciTxOutDatum), TxOutRef(..))
 import           Playground.Contract as Playground  (ToSchema)
 import           Plutus.Contract.Request as Request (mkTxContract, submitTxConfirmed, ownPaymentPubKeyHash)
-import           PlutusTx.Prelude                   (divide, (-), (++), (*))
+import           PlutusTx.Prelude                   (BuiltinByteString, divide, (-), (++), (*), (+))
 import qualified Prelude as Haskell                 (Either(..), return, Semigroup ((<>)), Show (..))
 import           Traceability.V1.OnChain            (ETDatum(..), etHash, etValidator, typedETValidator)
-import           Traceability.V1.Types              (ETValidatorParams(..))
+import           Traceability.V1.Types              (ETRedeemer(..), ETValidatorParams(..))
 
 
 -- | ETParams are parameters that are passed to the endpoints
@@ -51,9 +51,12 @@ data ETParams = ETParams
     , etpAdminPkh                    :: !Address.PaymentPubKeyHash
     , testAmount                     :: !Integer
     , datumAmount                    :: !Integer
+    , testOrderId                    :: !BuiltinByteString
     , testSplit                      :: !Integer
     , testMerchantPkh                :: !Address.PaymentPubKeyHash
     , testDonorPkh                   :: !Address.PaymentPubKeyHash
+    , testRefundPkh                  :: !Address.PaymentPubKeyHash
+    , testServiceFee                 :: !Integer
     } deriving (Haskell.Show, Generic, FromJSON, ToJSON, Playground.ToSchema)
 
 
@@ -85,14 +88,18 @@ lockAdaTx etp = do
             ,   etvAdminPkh       = etpAdminPkh etp
             }
         adaAmount = testAmount etp
+        serviceFee = testServiceFee etp
         etDatum = ETDatum
             {   
-                etdAmount = datumAmount etp                                                 
+                etdAmount = datumAmount etp  
+            ,   etdOrderId = testOrderId etp
+            ,   etdServiceFee = serviceFee
+            ,   etdRefundAddr = testRefundPkh etp                                               
             }
         dat = PlutusTx.toBuiltinData etDatum
         lookups = Constraints.typedValidatorLookups (typedETValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
                   Constraints.otherScript (etValidator $ PlutusTx.toBuiltinData etvParams) 
-        tx = Constraints.mustPayToTheScript dat (Ada.lovelaceValueOf adaAmount)  
+        tx = Constraints.mustPayToTheScript dat (Ada.lovelaceValueOf (adaAmount + serviceFee))  
 
     utx <- Contract.mapError (review Contract._ConstraintResolutionContractError) (Request.mkTxContract lookups tx)
     let adjustedUtx = Constraints.adjustUnbalancedTx utx
@@ -118,16 +125,18 @@ unLockAdaTx etp = do
 
     ownPkh <- Request.ownPaymentPubKeyHash
     let adaAmount = etdAmount etd
+        serviceFee = etdServiceFee etd
         splitAmount = testSplit etp
         merchantAmount = divide (adaAmount * splitAmount) 100
         donorAmount = divide (adaAmount * (100 - splitAmount)) 100
-        red = Scripts.Redeemer $ PlutusTx.toBuiltinData ()
+        red = Scripts.Redeemer $ PlutusTx.toBuiltinData Spend 
 
         lookups = Constraints.typedValidatorLookups (typedETValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
                   Constraints.otherScript (etValidator $ PlutusTx.toBuiltinData etvParams) Haskell.<> 
                   Constraints.unspentOutputs (Map.singleton oref o)
         tx =      Constraints.mustPayToPubKey (testMerchantPkh etp) (Ada.lovelaceValueOf merchantAmount) Haskell.<> 
                   Constraints.mustPayToPubKey (testDonorPkh etp) (Ada.lovelaceValueOf donorAmount) Haskell.<> 
+                  Constraints.mustPayToPubKey (etpAdminPkh etp) (Ada.lovelaceValueOf serviceFee) Haskell.<> 
                   Constraints.mustSpendScriptOutput oref red Haskell.<> 
                   Constraints.mustBeSignedBy ownPkh
 
