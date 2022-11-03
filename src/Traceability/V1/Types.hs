@@ -12,9 +12,8 @@ module Traceability.V1.Types
 )where
 
 import qualified    Ledger.Address as Address           (PaymentPubKeyHash(..))
-import qualified Ledger.Value as Value                  (TokenName(..))
 import qualified    PlutusTx                            (makeIsDataIndexed, makeLift)
-import              PlutusTx.Prelude                    (Bool(..), Integer)
+import              PlutusTx.Prelude                    (Integer)
 import qualified    Prelude as Haskell                  (Show)
 
 

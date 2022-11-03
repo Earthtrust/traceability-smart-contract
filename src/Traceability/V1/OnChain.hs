@@ -23,6 +23,7 @@ import           GHC.Generics                       (Generic)
 import           Ledger                             (ScriptContext(..), TxInfo(..),  txSignedBy, )
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
 import qualified Ledger.Address as Address          (Address, PaymentPubKeyHash(..), pubKeyHashAddress)
+import qualified Ledger.Contexts as Contexts        (TxInInfo(..), TxInInfo(txInInfoResolved))
 import qualified Ledger.Scripts as Scripts          (mkValidatorScript, Script, Validator, ValidatorHash)                                                  
 import qualified Ledger.Tx as Tx                    (TxOut(..))
 import qualified Ledger.Typed.Scripts.Validators as Validators (unsafeMkTypedValidator)
@@ -60,6 +61,24 @@ validOutputs scriptAddr txVal (x:xs)
     | otherwise = validOutputs scriptAddr txVal xs
 
 
+-- | Check that the value is there for the provided outputs
+{-# INLINABLE validOutput #-}
+validOutput :: Value.Value -> [Tx.TxOut] -> Bool
+validOutput _ [] = False
+validOutput txVal (x:xs)
+    | (Tx.txOutValue x == txVal) = True
+    | otherwise = validOutput txVal xs
+
+
+-- | Check to see if the buy token is in the list of inputs locked at an address
+{-# INLINABLE validInput #-}
+validInput :: Value.Value -> [Contexts.TxInInfo] -> Bool
+validInput _ [] = False
+validInput txVal (x:xs)
+    | validOutput txVal [Contexts.txInInfoResolved x] = True
+    | otherwise = validInput txVal xs
+
+
 -- | mkETValidator is the minting policy is for creating an Earthtrust order token when
 --   an order is submitted.
 {-# INLINABLE mkETValidator #-}
@@ -68,6 +87,7 @@ mkETValidator params dat _ ctx =
     traceIfFalse "ETV1" checkMerchantOutput 
     && traceIfFalse "ETV2" checkDonorOutput 
     && traceIfFalse "ETV3" signedByAdmin
+    && traceIfFalse "ETV4" checkInput
                 
   where
     info :: TxInfo
@@ -104,6 +124,11 @@ mkETValidator params dat _ ctx =
     --   address for the donor  
     checkDonorOutput :: Bool
     checkDonorOutput = validOutputs donorAddress donorAmount (txInfoOutputs info)
+
+    -- | Checks that the amount in the datum matches the actual amount in the input
+    --   transaction
+    checkInput :: Bool
+    checkInput = validInput (Ada.lovelaceValueOf adaAmount) (txInfoInputs info)
 
 
 -- | Creating a wrapper around littercoin validator for 

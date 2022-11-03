@@ -50,6 +50,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
     admin <- Simulator.activateContract w2 UseContract
     fraud <- Simulator.activateContract w3 UseContract
 
+
     ------------------------------------------------------------------------------------------------------
     -- Test Case #1, lock order amount at earthtrust smart contract, and send the correct amount 
     -- to merchant and donor 
@@ -63,6 +64,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpDonorPkh = donorPkh
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
+                , datumAmount = 100000000
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
@@ -109,6 +111,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpDonorPkh = donorPkh
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
+                , datumAmount = 100000000
                 , testSplit = 100
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
@@ -156,6 +159,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpDonorPkh = donorPkh
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
+                , datumAmount = 100000000
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = adminPkh
@@ -188,6 +192,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpDonorPkh = donorPkh
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
+                , datumAmount = 100000000
                 , testSplit = 95
                 , testMerchantPkh = adminPkh
                 , testDonorPkh = donorPkh
@@ -216,6 +221,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , etpDonorPkh = donorPkh
                 , etpAdminPkh = adminPkh 
                 , testAmount = 100000000
+                , datumAmount = 100000000
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
@@ -231,6 +237,58 @@ main = void $ Simulator.runSimulationWith handlers $ do
 
     balances_et7 <- Simulator.currentBalances
     Simulator.logBalances @(Builtin Contracts) balances_et7
+
+    Simulator.logString @(Builtin Contracts) "Test Case #5 spend unspent utxo with admin"
+    Simulator.logString @(Builtin Contracts) $ show etp5
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance admin "unlock" etp5
+
+    ------------------------------------------------------------------------------------------------------
+    -- Test Case #6, unlock order amount with incorrect datum value
+    ------------------------------------------------------------------------------------------------------
+
+
+    Simulator.waitNSlots 5   
+
+    let etp6 = ETParams
+                { 
+                  etpVersion = 1 
+                , etpSplit = 95       
+                , etpMerchantPkh = merchantPkh
+                , etpDonorPkh = donorPkh
+                , etpAdminPkh = adminPkh 
+                , testAmount = 100000000
+                , datumAmount = 50000000
+                , testSplit = 95
+                , testMerchantPkh = merchantPkh
+                , testDonorPkh = donorPkh
+                }
+
+
+    Simulator.logString @(Builtin Contracts) "Test Case #6, lock with incorrect datum value"
+    Simulator.logString @(Builtin Contracts) $ show etp6
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance buyer "lock" etp6
+
+    Simulator.waitNSlots 5   
+
+    balances_et8 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et8
+
+
+    Simulator.logString @(Builtin Contracts) "Test Case #6, unlock with incorrect datum value"
+    Simulator.logString @(Builtin Contracts) $ show etp6
+    Simulator.logString @(Builtin Contracts) "Press return to continue"
+    void $ liftIO getLine
+    void $ Simulator.callEndpointOnInstance admin "unlock" etp6
+
+    Simulator.waitNSlots 5   
+
+    balances_et9 <- Simulator.currentBalances
+    Simulator.logBalances @(Builtin Contracts) balances_et9
+
 
     shutdown
 
