@@ -20,7 +20,7 @@ module Traceability.V1.OnChain
 
 import           Data.Aeson                         (FromJSON, ToJSON)
 import           GHC.Generics                       (Generic)
-import           Ledger                             (ScriptContext(..), TxInfo(..),  txSignedBy, )
+import           Ledger                             (PubKeyHash(..), ScriptContext(..), TxInfo(..),  txSignedBy, )
 import qualified Ledger.Ada as Ada                  (lovelaceValueOf)
 import qualified Ledger.Address as Address          (Address, PaymentPubKeyHash(..), pubKeyHashAddress)
 import qualified Ledger.Contexts as Contexts        (TxInInfo(..), TxInInfo(txInInfoResolved))
@@ -46,8 +46,7 @@ import           Traceability.V1.Types              (ETRedeemer(..), ETValidator
 data ETDatum = ETDatum
     {   etdAmount           :: Integer 
     ,   etdOrderId          :: BuiltinByteString
-    ,   etdServiceFee       :: Integer
-    ,   etdRefundAddr       :: !Address.PaymentPubKeyHash                                                                                                            
+    ,   etdServiceFee       :: Integer                                                                                                            
     } deriving (Haskell.Show, Generic, FromJSON, ToJSON)
 
 PlutusTx.makeIsDataIndexed ''ETDatum [('ETDatum, 0)]
@@ -72,7 +71,7 @@ validOutput txVal (x:xs)
     | otherwise = validOutput txVal xs
 
 
--- | Check to see if the buy token is in the list of inputs locked at an address
+-- | Check to see if the value is part of the input
 {-# INLINABLE validInput #-}
 validInput :: Value.Value -> [Contexts.TxInInfo] -> Bool
 validInput _ [] = False
@@ -91,7 +90,7 @@ mkETValidator params dat red ctx =
                 && traceIfFalse "ETV2" checkDonorOutput 
                 && traceIfFalse "ETV3" checkInput  
                 && traceIfFalse "ETV4" signedByAdmin
-        Refund amt -> (traceIfFalse "ETV5" $ checkRefundOutput amt)
+        Refund amt bbs -> (traceIfFalse "ETV5" $ checkRefundOutput amt bbs)
                 && (traceIfFalse "ETV6" $ checkRefundInput amt)
                 && traceIfFalse "ETV7" signedByAdmin
                 
@@ -117,8 +116,7 @@ mkETValidator params dat red ctx =
         donorAddress :: Address.Address
         donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing
 
-        refundAddress :: Address.Address
-        refundAddress = Address.pubKeyHashAddress (etdRefundAddr dat) Nothing
+
 
         donorAmount :: Value.Value
         donorAmount = Ada.lovelaceValueOf (divide (adaAmount * (100 - split)) 100)
@@ -149,8 +147,15 @@ mkETValidator params dat red ctx =
 
         -- | Check that the refund output contains the correct ada amount and
         --   goes to the refund address
-        checkRefundOutput :: Integer -> Bool
-        checkRefundOutput refundAmt = validOutputs refundAddress (Ada.lovelaceValueOf refundAmt) (txInfoOutputs info)
+        checkRefundOutput :: Integer -> BuiltinByteString -> Bool
+        checkRefundOutput refundAmt refundPkhBBS = validOutputs refundAddress (Ada.lovelaceValueOf refundAmt) (txInfoOutputs info)
+          where
+            refundPkh :: Address.PaymentPubKeyHash
+            refundPkh = Address.PaymentPubKeyHash $ PubKeyHash refundPkhBBS
+
+            refundAddress :: Address.Address
+            refundAddress = Address.pubKeyHashAddress refundPkh Nothing
+                
 
 
 -- | Creating a wrapper around littercoin validator for 

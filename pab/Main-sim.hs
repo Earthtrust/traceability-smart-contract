@@ -10,12 +10,14 @@ import           Control.Monad                          (void)
 import           Control.Monad.Freer                    (interpret)
 import           Control.Monad.IO.Class                 (MonadIO (..))
 import           Data.Default                           (def)
-import           Ledger.Address                         (PaymentPubKeyHash)
+import           Ledger                                 (PubKeyHash(..))
+import           Ledger.Address                         (PaymentPubKeyHash(..))
 import qualified Ledger.CardanoWallet as CW
 import           PabContract                            (Contracts(..))
 import           Plutus.PAB.Effects.Contract.Builtin    (Builtin, BuiltinHandler(contractHandler), handleBuiltin)
 import qualified Plutus.PAB.Simulator as Simulator
 import qualified Plutus.PAB.Webserver.Server as PAB.Server
+import           PlutusTx.Prelude                       (BuiltinByteString)
 import           Wallet.Emulator.Wallet                 (knownWallet)
 
 
@@ -24,6 +26,9 @@ adminPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 1)
 
 buyerPkh :: PaymentPubKeyHash
 buyerPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 2)
+
+buyerPkhBBS :: BuiltinByteString
+buyerPkhBBS = getPubKeyHash $ unPaymentPubKeyHash buyerPkh
 
 --fraudPkh :: PaymentPubKeyHash
 --fraudPkh = CW.paymentPubKeyHash (CW.fromWalletNumber $ CW.WalletNumber 3)
@@ -74,7 +79,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -125,7 +130,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 100
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -174,7 +179,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = adminPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -209,7 +214,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = adminPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -243,7 +248,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -285,7 +290,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 
@@ -334,7 +339,7 @@ main = void $ Simulator.runSimulationWith handlers $ do
                 , testSplit = 95
                 , testMerchantPkh = merchantPkh
                 , testDonorPkh = donorPkh
-                , testRefundPkh = buyerPkh
+                , testRefundPkhBBS = buyerPkhBBS
                 , testServiceFee = 500000
                 }
 

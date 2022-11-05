@@ -6,41 +6,38 @@
 [INFO] To start PAB simulation press return
 
 [INFO] Initializing contract handle for wallet 1
-[INFO] Initialising contract UseContract with ID 6f5b263f-bc19-4871-a369-e54b1762faf8
-[INFO] Activated instance 6f5b263f-bc19-4871-a369-e54b1762faf8 on W[1]
-[INFO] Initialising contract UseContract with ID fddffdd0-b869-4c3b-9e46-fb3d28127b7f
-[INFO] Activated instance fddffdd0-b869-4c3b-9e46-fb3d28127b7f on W[2]
-[INFO] Initialising contract UseContract with ID 7f6c91f7-1258-4c7d-aa54-c668878ced0d
-[INFO] Activated instance 7f6c91f7-1258-4c7d-aa54-c668878ced0d on W[3]
+[INFO] Initialising contract UseContract with ID 29cf957a-7018-46c6-b5bb-3fae0763db5b
+[INFO] Activated instance 29cf957a-7018-46c6-b5bb-3fae0763db5b on W[1]
+[INFO] Initialising contract UseContract with ID 07b24d51-f7fe-4fea-8005-1b3810f4feab
+[INFO] Activated instance 07b24d51-f7fe-4fea-8005-1b3810f4feab on W[2]
+[INFO] Initialising contract UseContract with ID 46c4c9f1-87a7-45e4-8ac1-dae844273e54
+[INFO] Activated instance 46c4c9f1-87a7-45e4-8ac1-dae844273e54 on W[3]
 [INFO] -----------------------------------------------------------------------
 [INFO] Test Case #1, send order amount total to earthtrust contract
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
 [INFO] W[2]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 2188ad37d8558aca3595ea6a6e21b45b77a78c98d8da465ab7fb8829aa7e43a5:
+                 Tx 480eec90bbb37c8e2b1f9b55f9738849b0f1d8b6de0757785a1f972c59db514c:
                    {inputs:
                    collateral inputs:
                    outputs:
                      - Value (Map [(,Map [("",100500000)])]) addressed to
-                       ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                       ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                    mint: Value (Map [])
                    fee: Value (Map [])
                    mps:
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "123",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "123", 500000>}
                Requires signatures:
                Utxo index:
                Validity range:
                  (-∞ , +∞)
 [INFO] W[2]: Finished balancing:
-               Tx 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55:
+               Tx dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!20
 
@@ -48,23 +45,20 @@
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!20
 
                  outputs:
-                   - Value (Map [(,Map [("",9899499511)])]) addressed to
+                   - Value (Map [(,Map [("",9899499541)])]) addressed to
                      PubKeyCredential: 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7 (no staking credential)
                    - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",489)])])
+                 fee: Value (Map [(,Map [("",459)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "123",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[2]: Signing tx: 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55
-[INFO] W[2]: Submitting tx: 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55
-[INFO] Slot 5: TxnValidate 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55
+                   <100000000, "123", 500000>}
+[INFO] W[2]: Signing tx: dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c
+[INFO] W[2]: Submitting tx: dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c
+[INFO] Slot 24: TxnValidate dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -74,7 +68,7 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99899499511
+[INFO]     {, ""}: 99899499541
 [INFO] Wallet 1: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 10: 
@@ -85,20 +79,20 @@
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #1 unlock Ada amount at smart contract for correct amount
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"123\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"123\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 3e0c3afa640f1000eed1b1beb380ac26dd470ddb32861c5a6612d2c941a7f8b0:
+                 Tx 957ff3f13026a393b6803e92723ab3ca9f234ec816b2f18fae42676cdd012b7b:
                    {inputs:
-                      - 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55!1
+                      - dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c!1
                         <>
                    collateral inputs:
                    outputs:
@@ -114,30 +108,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "123",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "123", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55!1
+                 ( dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx 876cbf126549cc36f570c482ecee92ccca9e5f78a99a08bbbd92003f1eb2886d:
+               Tx 9d0ae62f7fedd6eb388b0c0aa7c3a4c9f09cf1661e025d6a0e52547c3fb60720:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!50
 
-                    - 9299bed4987eab37c747a035d4e58b786a36954588954e9cc00362999af31d55!1
+                    - dec8b11beafa96167870dc4d5ea4a1d439a8f10dd655747ffdefdb8228d2e53c!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!50
 
                  outputs:
-                   - Value (Map [(,Map [("",9998358560)])]) addressed to
+                   - Value (Map [(,Map [("",9998359040)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -146,18 +137,15 @@
                    - Value (Map [(,Map [("",95000000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",141440)])])
+                 fee: Value (Map [(,Map [("",140960)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "123",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: 876cbf126549cc36f570c482ecee92ccca9e5f78a99a08bbbd92003f1eb2886d
-[INFO] W[1]: Submitting tx: 876cbf126549cc36f570c482ecee92ccca9e5f78a99a08bbbd92003f1eb2886d
-[INFO] Slot 14: TxnValidate 876cbf126549cc36f570c482ecee92ccca9e5f78a99a08bbbd92003f1eb2886d
+                   <100000000, "123", 500000>}
+[INFO] W[1]: Signing tx: 9d0ae62f7fedd6eb388b0c0aa7c3a4c9f09cf1661e025d6a0e52547c3fb60720
+[INFO] W[1]: Submitting tx: 9d0ae62f7fedd6eb388b0c0aa7c3a4c9f09cf1661e025d6a0e52547c3fb60720
+[INFO] Slot 41: TxnValidate 9d0ae62f7fedd6eb388b0c0aa7c3a4c9f09cf1661e025d6a0e52547c3fb60720
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -167,9 +155,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99899499511
+[INFO]     {, ""}: 99899499541
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 100000358560
+[INFO]     {, ""}: 100000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -180,33 +168,30 @@
 [INFO]     {, ""}: 100000000000
 [INFO] -----------------------------------------------------------------------
 [INFO] Test Case #2, send order amount total to earthtrust contract
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 100, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 100, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
 [INFO] W[2]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 647015f384b9b35b8ca6e01fb609f2efe42d89a32f4d70c03de97fc4fc4271a1:
+                 Tx b3ff0669322168f503e75c2ee6b78de94a3f5cfecb9b8f8ef089194ba046f2d6:
                    {inputs:
                    collateral inputs:
                    outputs:
                      - Value (Map [(,Map [("",100500000)])]) addressed to
-                       ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                       ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                    mint: Value (Map [])
                    fee: Value (Map [])
                    mps:
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                Utxo index:
                Validity range:
                  (-∞ , +∞)
 [INFO] W[2]: Finished balancing:
-               Tx d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44:
+               Tx 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!21
 
@@ -214,23 +199,20 @@
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!21
 
                  outputs:
-                   - Value (Map [(,Map [("",9899499511)])]) addressed to
+                   - Value (Map [(,Map [("",9899499541)])]) addressed to
                      PubKeyCredential: 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7 (no staking credential)
                    - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",489)])])
+                 fee: Value (Map [(,Map [("",459)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[2]: Signing tx: d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44
-[INFO] W[2]: Submitting tx: d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44
-[INFO] Slot 22: TxnValidate d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44
+                   <100000000, "124", 500000>}
+[INFO] W[2]: Signing tx: 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966
+[INFO] W[2]: Submitting tx: 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966
+[INFO] Slot 69: TxnValidate 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -240,9 +222,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798999022
+[INFO]     {, ""}: 99798999082
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 100000358560
+[INFO]     {, ""}: 100000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -251,20 +233,20 @@
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #2 unlock Ada amount at smart contract for incorrect amount
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 100, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 100, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx dc55e07a954a761d144252b92f6fb107e5f147220818accc475165062f0d713e:
+                 Tx 1264a091d6cd78a7b604564d8453de705e4555a832844d07249bb66b9814cd6b:
                    {inputs:
-                      - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                      - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                         <>
                    collateral inputs:
                    outputs:
@@ -280,30 +262,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                 ( 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx 4364b603a2affbaa702349025895057be3b25643de8929334945125e0ba071e8:
+               Tx 7e9731ceb8fd691d8fe6a1471c59cb80424a053172f8660265aa4d8b25f3ca31:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!51
 
-                    - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                    - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!51
 
                  outputs:
-                   - Value (Map [(,Map [("",9995197781)])]) addressed to
+                   - Value (Map [(,Map [("",9995197817)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -312,18 +291,15 @@
                    - Value (Map [(,Map [("",100000000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",1302219)])])
+                 fee: Value (Map [(,Map [("",1302183)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: 4364b603a2affbaa702349025895057be3b25643de8929334945125e0ba071e8
-[INFO] W[1]: Submitting tx: 4364b603a2affbaa702349025895057be3b25643de8929334945125e0ba071e8
-[WARNING] Slot 31: TxnValidationFail Phase2 4364b603a2affbaa702349025895057be3b25643de8929334945125e0ba071e8: ScriptFailure (EvaluationError ["ETV1","PT5"] "CekEvaluationFailure")
+                   <100000000, "124", 500000>}
+[INFO] W[1]: Signing tx: 7e9731ceb8fd691d8fe6a1471c59cb80424a053172f8660265aa4d8b25f3ca31
+[INFO] W[1]: Submitting tx: 7e9731ceb8fd691d8fe6a1471c59cb80424a053172f8660265aa4d8b25f3ca31
+[WARNING] Slot 81: TxnValidationFail Phase2 7e9731ceb8fd691d8fe6a1471c59cb80424a053172f8660265aa4d8b25f3ca31: ScriptFailure (EvaluationError ["ETV1","PT5"] "CekEvaluationFailure")
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -333,9 +309,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798999022
+[INFO]     {, ""}: 99798999082
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 90000358560
+[INFO]     {, ""}: 90000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -344,20 +320,20 @@
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #3 unlock Ada amount at smart contract to incorrect donor address
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 38a4c66ac59b501848454391fa3c2810863ac8468ff0967ac242065f1cd6fcf7:
+                 Tx 63916bb0e0a0aeed48560964a1721cc48f17a144d34f1ec1bf024f833338a140:
                    {inputs:
-                      - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                      - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                         <>
                    collateral inputs:
                    outputs:
@@ -373,30 +349,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                 ( 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx cf78e5885391593dd5ec1dff6fe948555f4428f0d2065673016a860efa50e58a:
+               Tx 6572650b51b36621dbaaea43ce440b7e865a7ad85e6c026959d94b922f920e61:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!52
 
-                    - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                    - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!52
 
                  outputs:
-                   - Value (Map [(,Map [("",9997197781)])]) addressed to
+                   - Value (Map [(,Map [("",9997197817)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -405,18 +378,15 @@
                    - Value (Map [(,Map [("",95000000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",1302219)])])
+                 fee: Value (Map [(,Map [("",1302183)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: cf78e5885391593dd5ec1dff6fe948555f4428f0d2065673016a860efa50e58a
-[INFO] W[1]: Submitting tx: cf78e5885391593dd5ec1dff6fe948555f4428f0d2065673016a860efa50e58a
-[WARNING] Slot 61: TxnValidationFail Phase2 cf78e5885391593dd5ec1dff6fe948555f4428f0d2065673016a860efa50e58a: ScriptFailure (EvaluationError ["ETV2","PT5"] "CekEvaluationFailure")
+                   <100000000, "124", 500000>}
+[INFO] W[1]: Signing tx: 6572650b51b36621dbaaea43ce440b7e865a7ad85e6c026959d94b922f920e61
+[INFO] W[1]: Submitting tx: 6572650b51b36621dbaaea43ce440b7e865a7ad85e6c026959d94b922f920e61
+[WARNING] Slot 105: TxnValidationFail Phase2 6572650b51b36621dbaaea43ce440b7e865a7ad85e6c026959d94b922f920e61: ScriptFailure (EvaluationError ["ETV2","PT5"] "CekEvaluationFailure")
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -426,9 +396,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798999022
+[INFO]     {, ""}: 99798999082
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 80000358560
+[INFO]     {, ""}: 80000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -437,20 +407,20 @@
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #4 unlock Ada amount at smart contract to incorrect merchant address
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 83eaaca51018ca985b5d4345cc1ca201b0259dfa7ba5e3195bb3684a998d67fc:
+                 Tx 75f396f791816dda2095a40ce11f5a476a4c96d59681f27e791ca4c4df8f38c3:
                    {inputs:
-                      - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                      - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                         <>
                    collateral inputs:
                    outputs:
@@ -466,30 +436,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                 ( 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx 9a50ccdf3b5c6b75f081c105c8ec0f930fa235fedd4b7f3239bf50062f1e2a65:
+               Tx b66548c5de9f65053b2de8eb81f19bbd92c3f3cf8a31d74208d4820a6330dbe0:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!53
 
-                    - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                    - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!53
 
                  outputs:
-                   - Value (Map [(,Map [("",9997197781)])]) addressed to
+                   - Value (Map [(,Map [("",9997197817)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -498,18 +465,15 @@
                    - Value (Map [(,Map [("",95000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",1302219)])])
+                 fee: Value (Map [(,Map [("",1302183)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: 9a50ccdf3b5c6b75f081c105c8ec0f930fa235fedd4b7f3239bf50062f1e2a65
-[INFO] W[1]: Submitting tx: 9a50ccdf3b5c6b75f081c105c8ec0f930fa235fedd4b7f3239bf50062f1e2a65
-[WARNING] Slot 69: TxnValidationFail Phase2 9a50ccdf3b5c6b75f081c105c8ec0f930fa235fedd4b7f3239bf50062f1e2a65: ScriptFailure (EvaluationError ["ETV1","PT5"] "CekEvaluationFailure")
+                   <100000000, "124", 500000>}
+[INFO] W[1]: Signing tx: b66548c5de9f65053b2de8eb81f19bbd92c3f3cf8a31d74208d4820a6330dbe0
+[INFO] W[1]: Submitting tx: b66548c5de9f65053b2de8eb81f19bbd92c3f3cf8a31d74208d4820a6330dbe0
+[WARNING] Slot 116: TxnValidationFail Phase2 b66548c5de9f65053b2de8eb81f19bbd92c3f3cf8a31d74208d4820a6330dbe0: ScriptFailure (EvaluationError ["ETV1","PT5"] "CekEvaluationFailure")
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -519,9 +483,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798999022
+[INFO]     {, ""}: 99798999082
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 70000358560
+[INFO]     {, ""}: 70000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -530,20 +494,20 @@
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #5, unlock order amount at earthtrust smart contract not being admin
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 7f6c91f7-1258-4c7d-aa54-c668878ced0d: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 7f6c91f7-1258-4c7d-aa54-c668878ced0d: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44, txOutRefIdx = 1}"
-[INFO] 7f6c91f7-1258-4c7d-aa54-c668878ced0d: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 46c4c9f1-87a7-45e4-8ac1-dae844273e54: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000}"
+[INFO] 46c4c9f1-87a7-45e4-8ac1-dae844273e54: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966, txOutRefIdx = 1}"
+[INFO] 46c4c9f1-87a7-45e4-8ac1-dae844273e54: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[3]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 977905a78365278c35b1ccff517a5c17dbe64d1a5b412f6a40539fc421e55c11:
+                 Tx 2cb76d664ce5d6e02d2c13266a82415ca4472ce326cb306581b80d8167d9914a:
                    {inputs:
-                      - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                      - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                         <>
                    collateral inputs:
                    outputs:
@@ -559,30 +523,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                  2e0ad60c3207248cecd47dbde3d752e0aad141d6b8f81ac2c6eca27c
                Utxo index:
-                 ( d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                 ( 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[3]: Finished balancing:
-               Tx 48608f2eb8c019ae67a7b1e3820a8de5d286fdeb48586d7b1b70fc2bf153f12a:
+               Tx 4e9ed2f45c71b5e470eca8b6da69a1e8563fb64743655aea4066bb10b84031ed:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!0
 
-                    - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                    - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!0
 
                  outputs:
-                   - Value (Map [(,Map [("",9997197783)])]) addressed to
+                   - Value (Map [(,Map [("",9997197819)])]) addressed to
                      PubKeyCredential: 2e0ad60c3207248cecd47dbde3d752e0aad141d6b8f81ac2c6eca27c (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -591,18 +552,15 @@
                    - Value (Map [(,Map [("",95000000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",1302217)])])
+                 fee: Value (Map [(,Map [("",1302181)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[3]: Signing tx: 48608f2eb8c019ae67a7b1e3820a8de5d286fdeb48586d7b1b70fc2bf153f12a
-[INFO] W[3]: Submitting tx: 48608f2eb8c019ae67a7b1e3820a8de5d286fdeb48586d7b1b70fc2bf153f12a
-[WARNING] Slot 85: TxnValidationFail Phase2 48608f2eb8c019ae67a7b1e3820a8de5d286fdeb48586d7b1b70fc2bf153f12a: ScriptFailure (EvaluationError ["ETV4","PT5"] "CekEvaluationFailure")
+                   <100000000, "124", 500000>}
+[INFO] W[3]: Signing tx: 4e9ed2f45c71b5e470eca8b6da69a1e8563fb64743655aea4066bb10b84031ed
+[INFO] W[3]: Submitting tx: 4e9ed2f45c71b5e470eca8b6da69a1e8563fb64743655aea4066bb10b84031ed
+[WARNING] Slot 125: TxnValidationFail Phase2 4e9ed2f45c71b5e470eca8b6da69a1e8563fb64743655aea4066bb10b84031ed: ScriptFailure (EvaluationError ["ETV4","PT5"] "CekEvaluationFailure")
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -612,9 +570,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798999022
+[INFO]     {, ""}: 99798999082
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 70000358560
+[INFO]     {, ""}: 70000359040
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -623,20 +581,20 @@
 [INFO]     {, ""}: 90000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #5 spend unspent utxo with admin
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 100000000, etdOrderId = \"124\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 977905a78365278c35b1ccff517a5c17dbe64d1a5b412f6a40539fc421e55c11:
+                 Tx 2cb76d664ce5d6e02d2c13266a82415ca4472ce326cb306581b80d8167d9914a:
                    {inputs:
-                      - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                      - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                         <>
                    collateral inputs:
                    outputs:
@@ -652,30 +610,27 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <100000000,
-                     "124",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <100000000, "124", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                 ( 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx 526666f2bca44daf0a46ba1b67085713caf7f2f1165f6427c3ec952297142c95:
+               Tx f9a51d403b12a8eaa9a88e6196444ceea6175dcbdf41da1e2f0d8d7d9eafb2da:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!54
 
-                    - d0391137df031bba098d3aae1a481628f45a7ec77e60fbca89a3aebb34e50e44!1
+                    - 89dff5cd5b6c8045007c4723c4c931d1e1aa42e05505d4705ca0c3849043b966!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!54
 
                  outputs:
-                   - Value (Map [(,Map [("",9998358560)])]) addressed to
+                   - Value (Map [(,Map [("",9998359040)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -684,46 +639,40 @@
                    - Value (Map [(,Map [("",95000000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",141440)])])
+                 fee: Value (Map [(,Map [("",140960)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <100000000,
-                   "124",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: 526666f2bca44daf0a46ba1b67085713caf7f2f1165f6427c3ec952297142c95
-[INFO] W[1]: Submitting tx: 526666f2bca44daf0a46ba1b67085713caf7f2f1165f6427c3ec952297142c95
-[INFO] Slot 93: TxnValidate 526666f2bca44daf0a46ba1b67085713caf7f2f1165f6427c3ec952297142c95
+                   <100000000, "124", 500000>}
+[INFO] W[1]: Signing tx: f9a51d403b12a8eaa9a88e6196444ceea6175dcbdf41da1e2f0d8d7d9eafb2da
+[INFO] W[1]: Submitting tx: f9a51d403b12a8eaa9a88e6196444ceea6175dcbdf41da1e2f0d8d7d9eafb2da
+[INFO] Slot 135: TxnValidate f9a51d403b12a8eaa9a88e6196444ceea6175dcbdf41da1e2f0d8d7d9eafb2da
 [INFO] Test Case #6, lock with incorrect datum value
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 50000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 50000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
 [INFO] W[2]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 3801c9f5ba1f8830d57f063f159eefda42b089eff09cc4ae084fd078d27944b7:
+                 Tx 8d1ccdcfe531c603592b2ba041d86110e1cf9ca5920a8521e724477e3b50e7e7:
                    {inputs:
                    collateral inputs:
                    outputs:
                      - Value (Map [(,Map [("",100500000)])]) addressed to
-                       ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                       ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                    mint: Value (Map [])
                    fee: Value (Map [])
                    mps:
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <50000000,
-                     "123",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <50000000, "123", 500000>}
                Requires signatures:
                Utxo index:
                Validity range:
                  (-∞ , +∞)
 [INFO] W[2]: Finished balancing:
-               Tx e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b:
+               Tx fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!22
 
@@ -731,23 +680,20 @@
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!22
 
                  outputs:
-                   - Value (Map [(,Map [("",9899499511)])]) addressed to
+                   - Value (Map [(,Map [("",9899499541)])]) addressed to
                      PubKeyCredential: 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7 (no staking credential)
                    - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential)
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",489)])])
+                 fee: Value (Map [(,Map [("",459)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <50000000,
-                   "123",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[2]: Signing tx: e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b
-[INFO] W[2]: Submitting tx: e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b
-[INFO] Slot 100: TxnValidate e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b
+                   <50000000, "123", 500000>}
+[INFO] W[2]: Signing tx: fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379
+[INFO] W[2]: Submitting tx: fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379
+[INFO] Slot 146: TxnValidate fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -757,9 +703,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99698498533
+[INFO]     {, ""}: 99698498623
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 70000717120
+[INFO]     {, ""}: 70000718080
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -768,20 +714,20 @@
 [INFO]     {, ""}: 90000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #6, unlock with incorrect datum value
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 50000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 50000000, testOrderId = "123", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 50000000, etdOrderId = \"123\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "unlockAdaTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo with datum= ETDatum {etdAmount = 50000000, etdOrderId = \"123\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: found utxo oref= TxOutRef {txOutRefId = fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "unlockAdaTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx 82ffab19c22ababea27d8360283a5e2a6d10f985dd5189df0b857b84682ae52e:
+                 Tx 5cad9e404f42bc264a7f692ba5bf7b7ba0159213628bcac6a745aa4a681a43f9:
                    {inputs:
-                      - e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
+                      - fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
                         <>
                    collateral inputs:
                    outputs:
@@ -797,28 +743,25 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <50000000,
-                     "123",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <50000000, "123", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
+                 ( fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx f3a18016ea6350e88f79621b8699bac2cc29bb7e2220dbbfa1ebd6050dc2beb8:
+               Tx 4d308a6b2bf1c5d5217c7160c7d63e90068c95a570309c235ff9424dec134e42:
                  {inputs:
-                    - e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
+                    - fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
                       <>
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!55
 
                  outputs:
-                   - Value (Map [(,Map [("",47197923)])]) addressed to
+                   - Value (Map [(,Map [("",47197959)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
@@ -827,18 +770,15 @@
                    - Value (Map [(,Map [("",47500000)])]) addressed to
                      PubKeyCredential: 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",1302077)])])
+                 fee: Value (Map [(,Map [("",1302041)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <50000000,
-                   "123",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: f3a18016ea6350e88f79621b8699bac2cc29bb7e2220dbbfa1ebd6050dc2beb8
-[INFO] W[1]: Submitting tx: f3a18016ea6350e88f79621b8699bac2cc29bb7e2220dbbfa1ebd6050dc2beb8
-[WARNING] Slot 107: TxnValidationFail Phase2 f3a18016ea6350e88f79621b8699bac2cc29bb7e2220dbbfa1ebd6050dc2beb8: ScriptFailure (EvaluationError ["ETV3","PT5"] "CekEvaluationFailure")
+                   <50000000, "123", 500000>}
+[INFO] W[1]: Signing tx: 4d308a6b2bf1c5d5217c7160c7d63e90068c95a570309c235ff9424dec134e42
+[INFO] W[1]: Submitting tx: 4d308a6b2bf1c5d5217c7160c7d63e90068c95a570309c235ff9424dec134e42
+[WARNING] Slot 154: TxnValidationFail Phase2 4d308a6b2bf1c5d5217c7160c7d63e90068c95a570309c235ff9424dec134e42: ScriptFailure (EvaluationError ["ETV3","PT5"] "CekEvaluationFailure")
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -848,9 +788,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99698498533
+[INFO]     {, ""}: 99698498623
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 60000717120
+[INFO]     {, ""}: 60000718080
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 
@@ -859,21 +799,22 @@
 [INFO]     {, ""}: 90000000000
 [INFO] Wallet 5: 
 [INFO]     {, ""}: 100000000000
-[INFO] Script 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec: 
+[INFO] Script 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429: 
 [INFO]     {, ""}: 100500000
 [INFO] Test Case #7, issue refund because incorrect Datum (or invalid/unusable merchant or donor wallet address)
-[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkh = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7, testServiceFee = 500000}
+[INFO] ETParams {etpVersion = 1, etpSplit = 95, etpMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, etpDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, etpAdminPkh = a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2, testAmount = 100000000, datumAmount = 100000000, testOrderId = "124", testSplit = 95, testMerchantPkh = 8952ed1aff55f5b7674b122804a3c0a96f4e286352740c0cd0e9c746, testDonorPkh = dfe12ac160d354b690385751a144e3010610fe5ecf5d0d266f5b6811, testRefundPkhBBS = "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167", testServiceFee = 500000}
 [INFO] Press return to continue
 
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "refundTx: found utxo with datum= ETDatum {etdAmount = 50000000, etdOrderId = \"123\", etdServiceFee = 500000, etdRefundAddr = 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "refundTx: found utxo oref= TxOutRef {txOutRefId = e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b, txOutRefIdx = 1}"
-[INFO] 6f5b263f-bc19-4871-a369-e54b1762faf8: "refundTx: hash= 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "refundTx: found utxo with datum= ETDatum {etdAmount = 50000000, etdOrderId = \"123\", etdServiceFee = 500000}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "refundTx: found utxo oref= TxOutRef {txOutRefId = fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379, txOutRefIdx = 1}"
+[INFO] 29cf957a-7018-46c6-b5bb-3fae0763db5b: "refundTx: hash= 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429"
 [INFO] W[1]: Balancing an unbalanced transaction:
                Tx:
-                 Tx fe354f718c7ae3910ca3cfadd3eefe7cc88c5d914f6c6c6640a8ebb703d885d6:
+                 Tx 268dc17cce01fea45cbb0042e01f18f68524c318209cc2c071ff3d8c850a3c7e:
                    {inputs:
-                      - e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
-                        <100000000>
+                      - fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
+                        <100000000,
+                        "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">
                    collateral inputs:
                    outputs:
                      - Value (Map [(,Map [("",2000000)])]) addressed to
@@ -886,48 +827,43 @@
                    signatures:
                    validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                    data:
-                     <50000000,
-                     "123",
-                     500000,
-                     "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
+                     <50000000, "123", 500000>}
                Requires signatures:
                  a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2
                Utxo index:
-                 ( e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
+                 ( fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
                  , - Value (Map [(,Map [("",100500000)])]) addressed to
-                     ScriptCredential: 5930483acad722b7c4549cee4e22313b9818ff5357503902a513dfec (no staking credential) )
+                     ScriptCredential: 80d47979623ab4a001ec8f361dfb278338f1a09f22348ee6c62d5429 (no staking credential) )
                Validity range:
                  (-∞ , +∞)
 [INFO] W[1]: Finished balancing:
-               Tx 2710e6a1db0da23fbcf1eaad783c29a6281e4751d153ff15bd40f000c19ed2bb:
+               Tx 2dc4d069c1d1b33e5d514f7d22e4dc3980ccc6613a0cd2558f7d1be539f9ac2b:
                  {inputs:
                     - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!56
 
-                    - e19915f7708b46cfee39da3face0cb6b5916ba01c76b0a888c05e0b2b4a3e47b!1
-                      <100000000>
+                    - fd1da550e4eea1d545a329f806fddc88d39eaf6b49f33415d20d6f6b3ca4b379!1
+                      <100000000,
+                      "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">
                  collateral inputs:
                    - 08111487e032e647e23e6e6866665ab726a4c92532e9589f9e670f2585e35807!56
 
                  outputs:
-                   - Value (Map [(,Map [("",9998385314)])]) addressed to
+                   - Value (Map [(,Map [("",9998385559)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",2000000)])]) addressed to
                      PubKeyCredential: a2c20c77887ace1cd986193e4e75babd8993cfd56995cd5cfce609c2 (no staking credential)
                    - Value (Map [(,Map [("",100000000)])]) addressed to
                      PubKeyCredential: 80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7 (no staking credential)
                  mint: Value (Map [])
-                 fee: Value (Map [(,Map [("",114686)])])
+                 fee: Value (Map [(,Map [("",114441)])])
                  mps:
                  signatures:
                  validity range: Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound PosInf True}
                  data:
-                   <50000000,
-                   "123",
-                   500000,
-                   "\128\164\244[V\184\141\DC19\218#\188L<u\236m2\148<\b\DEL%\v\134\EM<\167">}
-[INFO] W[1]: Signing tx: 2710e6a1db0da23fbcf1eaad783c29a6281e4751d153ff15bd40f000c19ed2bb
-[INFO] W[1]: Submitting tx: 2710e6a1db0da23fbcf1eaad783c29a6281e4751d153ff15bd40f000c19ed2bb
-[INFO] Slot 117: TxnValidate 2710e6a1db0da23fbcf1eaad783c29a6281e4751d153ff15bd40f000c19ed2bb
+                   <50000000, "123", 500000>}
+[INFO] W[1]: Signing tx: 2dc4d069c1d1b33e5d514f7d22e4dc3980ccc6613a0cd2558f7d1be539f9ac2b
+[INFO] W[1]: Submitting tx: 2dc4d069c1d1b33e5d514f7d22e4dc3980ccc6613a0cd2558f7d1be539f9ac2b
+[INFO] Slot 165: TxnValidate 2dc4d069c1d1b33e5d514f7d22e4dc3980ccc6613a0cd2558f7d1be539f9ac2b
 [INFO] Wallet 7: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 8: 
@@ -937,9 +873,9 @@
 [INFO] Wallet 4: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 2: 
-[INFO]     {, ""}: 99798498533
+[INFO]     {, ""}: 99798498623
 [INFO] Wallet 1: 
-[INFO]     {, ""}: 60001102434
+[INFO]     {, ""}: 60001103639
 [INFO] Wallet 10: 
 [INFO]     {, ""}: 100000000000
 [INFO] Wallet 9: 

@@ -14,7 +14,7 @@ module Traceability.V1.Types
 
 import qualified    Ledger.Address as Address           (PaymentPubKeyHash(..))
 import qualified    PlutusTx                            (makeIsDataIndexed, makeLift)
-import              PlutusTx.Prelude                    (Integer)
+import              PlutusTx.Prelude                    (BuiltinByteString, Integer)
 import qualified    Prelude as Haskell                  (Show)
 
 
@@ -35,10 +35,9 @@ PlutusTx.makeLift ''ETValidatorParams
 -- | The ETRedemeer used to indicate if the action is to spend or refund the
 --   the Ada locked at the smart contract
 data ETRedeemer = 
-       Spend            -- spend earthtrust locked Ada and send to merchant and donor 
-     | Refund Integer   -- refund locked Ada to customer
+       Spend                              -- spend earthtrust locked Ada and send to merchant and donor 
+     | Refund Integer BuiltinByteString   -- refund locked Ada to customer and the given pkh
 
-    deriving Haskell.Show
 
 PlutusTx.makeIsDataIndexed
   ''ETRedeemer
