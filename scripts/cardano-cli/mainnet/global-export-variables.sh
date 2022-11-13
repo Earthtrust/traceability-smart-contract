@@ -8,7 +8,7 @@ set -o pipefail
 
 # Define export variables
 
-export BASE=/home/lawrence/src/traceability-smart-contract
+export BASE=/home/admin/src/traceability-smart-contract
 export WORK=$BASE/work
 export CARDANO_CLI=/usr/local/bin/cardano-cli
 export BECH32=/usr/local/bin/bech32
