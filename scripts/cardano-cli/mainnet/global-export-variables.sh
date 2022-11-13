@@ -24,4 +24,3 @@ export DONOR_ADDR=addr1v9wjlg0e9sz3q5tl4cxu3gaurasdvuvnw5fmnhwefyngphcpugugh
 export REFUND_ADDR=addr1v9x5aqdztj3t4356p58cny9zqv8vwggsu4sqraycrat385s8nkxje
 export VAL_REF_SCRIPT=0a87acbce1a58baa209c6676ab4e0c0afa16d7f53f7fcb36b7a5d2f004f63b43#1
 export SPLIT=99
-export BLOCKFROST_API=https://cardano-mainnet.blockfrost.io/api/v0
