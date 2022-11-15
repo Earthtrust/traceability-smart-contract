@@ -8,7 +8,6 @@ as possible.
 
 Please provide a clear and concise description of the vulnerability, including:
 
-* the affected version(s) of cardano-node,
 * steps that can be followed to excercise the vulnerability,
 * any workarounds or mitigatations
 
