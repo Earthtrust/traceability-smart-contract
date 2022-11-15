@@ -47,7 +47,7 @@ validator_script_addr=$($CARDANO_CLI address build --payment-script-file "$valid
 redeemer_file_path="$BASE/scripts/cardano-cli/$ENV/data/redeemer-earthtrust-spend.json"
 
 admin_pkh=$(cat $ADMIN_PKH)
-
+min_ada=1000000
 
 ################################################################
 # Spend the earthtrust UTXO
@@ -115,8 +115,18 @@ ada_usd_price_encoded=$(jq -r '.fields[2].bytes' $WORK/datum-in.json)
 ada_usd_price=$(echo -n "$ada_usd_price_encoded=" | xxd -r -p)
 merchant_split=$SPLIT
 donor_split=$((100 - $SPLIT)) 
-merchant_ada=$((order_ada * $merchant_split / 100))
-donor_ada=$((order_ada * $donor_split / 100))
+donor_ada_amount=$(($order_ada * $donor_split / 100))
+
+if (($donor_ada_amount < $min_ada ));
+then
+    donor_ada=$min_ada
+else
+    donor_ada=$donor_ada_amount
+fi
+
+merchant_ada=$(($order_ada - $donor_ada))
+
+
 now=$(date '+%Y/%m/%d-%H:%M:%S')
 
 
@@ -145,7 +155,7 @@ metadata="{
         \"order_id\" : \"$order_id\",
         \"order_ada_amount\" : \"$order_ada\",
         \"ada_usd_price\" : \"$ada_usd_price\",
-        \"version\" : \"1.0\"
+        \"version\" : \"0.1\"
         }
     }
 }"
@@ -194,6 +204,4 @@ curl -s -S -d '{"order":{"id":'"$order_id"',"tags":"PAID IN FULL"}}' \
 -X PUT "${NEXT_PUBLIC_SHOP}admin/api/2022-10/orders/$order_id.json" \
 -H "X-Shopify-Access-Token: $NEXT_PUBLIC_ACCESS_TOKEN" \
 -H "Content-Type: application/json" > /dev/null
-
-
 
