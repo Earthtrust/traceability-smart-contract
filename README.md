@@ -70,7 +70,7 @@ Prelude Traceability.V2.Deploy> :q
 Leaving GHCi.
 
 ```
-The new plutus scripts will be created in the littercoin/deploy directory
+The new plutus scripts will be created in the traceability-smart-contract/deploy directory
 
 ```
 [nix-shell:~/src/traceability-smart-contract]$ ls -l deploy/*
