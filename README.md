@@ -6,24 +6,20 @@ The traceability smart contract consists of a single smart contract where Ada is
 
 Below is the smart contract design for the traceability smart contract
 
-image
+![Traceability Smart Design](/images/smart-contract-design.png)
 
 
 
 ## Process Flows
 The following Ada payment flow shows both the spend and refund smart contract execution scenarios.
 
-image 
+![Ada Payment Flow](/images/ada-payment-flow.png)
 
 
 ## System Implementation
 Below is a simplified view of the components deployed as part of the traceability smart contract launch
 
-image
-
-The sequence diagram is a more detailed view showing all of the calls between each system component for order capture and smart contract execution.
-
-image
+![System Component View](/images/system-components.png)
 
 
 
