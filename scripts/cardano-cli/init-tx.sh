@@ -60,10 +60,6 @@ admin_pkh=$(cat $ADMIN_PKH)
 
 echo "starting traceability init script"
 
-################################################################
-# Mint the threadtoken and attach it to the littercoin contract
-################################################################
-
 # Step 1: Get UTXOs from admin
 # There needs to be at least 2 utxos that can be consumed; one for spending of the token
 # and one uxto for collateral
