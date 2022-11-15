@@ -9,7 +9,7 @@ set -o pipefail
 set -x
 
 # check if command line argument is empty or not present
-if [ -z $1 ]; 
+if [ -z $3 ]; 
 then
     echo "refund-tx.sh:  Invalid script arguments"
     echo "Usage: refund-tx.sh [devnet|preview|preprod|mainnet] txHash txIndx"
