@@ -34,13 +34,17 @@ import qualified Plutus.V2.Ledger.Api as PlutusV2               (mkValidatorScri
                                                                  unsafeFromBuiltinData)
 import qualified PlutusTx                                       (applyCode, compile, liftCode, makeIsDataIndexed, makeLift)
 import           PlutusTx.Prelude                               (Bool(..), BuiltinData, BuiltinByteString, check, divide, Integer, Maybe(..), 
-                                                                 otherwise, traceIfFalse, (&&), (==), ($), (-), (*), (+))
+                                                                 otherwise, traceIfFalse, (&&), (==), ($), (-), (*), (+), (<))
 import           Prelude                                        (Show (..))
 import           Traceability.V2.Types                          (ETRedeemer(..), ETValidatorParams(..))
 
 ------------------------------------------------------------------------
 -- On Chain Code
 ------------------------------------------------------------------------
+
+-- | The minimum amount of Ada that has to be sent with a transaction
+minAda :: Integer
+minAda = 1000000
 
 -- | ETDatum is used to record the total amount of the order and the order id
 data ETDatum = ETDatum
@@ -107,6 +111,15 @@ mkETValidator params dat red ctx =
 
         adaOrderAmount :: Integer
         adaOrderAmount = etdOrderAmount dat
+        
+        adaDonationAmount :: Integer
+        adaDonationAmount 
+            | donationAmount < minAda = minAda
+            | otherwise = donationAmount
+
+            where
+                donationAmount = (divide (adaOrderAmount * (100 - split)) 100)
+        
 
         -- | Admin signature required to run the smart contract
         signedByAdmin :: Bool
@@ -123,7 +136,7 @@ mkETValidator params dat red ctx =
         checkMerchantOutput = validOutput' merchantAddress merchantAmount (ContextsV2.txInfoOutputs info)
           where
             merchantAmount :: Value.Value
-            merchantAmount = Ada.lovelaceValueOf (divide (adaOrderAmount * split) 100)
+            merchantAmount = Ada.lovelaceValueOf (adaOrderAmount - adaDonationAmount)
 
             merchantAddress :: Address.Address
             merchantAddress = Address.pubKeyHashAddress (etvMerchantPkh params) Nothing
@@ -135,7 +148,7 @@ mkETValidator params dat red ctx =
         checkDonorOutput = validOutput' donorAddress donorAmount (ContextsV2.txInfoOutputs info)
           where
             donorAmount :: Value.Value
-            donorAmount = Ada.lovelaceValueOf (divide (adaOrderAmount * (100 - split)) 100)
+            donorAmount = Ada.lovelaceValueOf adaDonationAmount
             
             donorAddress :: Address.Address
             donorAddress = Address.pubKeyHashAddress (etvDonorPkh params) Nothing

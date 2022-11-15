@@ -101,7 +101,7 @@ metadata="{
         \"order_id\" : \"$order_id\",
         \"refund_ada_amount\" : \"$order_ada\",
         \"ada_usd_price\" : \"$ada_usd_price\",
-        \"version\" : \"1.0\"
+        \"version\" : \"0.1\"
         }
     }
 }"
