@@ -68,11 +68,11 @@ serviceFee = 500000
 
 -- Merchant Pkh
 merchantPubKeyHashBS :: B.ByteString
-merchantPubKeyHashBS = "7ee5307a64fc291e339607e36fda987e564adc4afd27ed373d04da0f"
+merchantPubKeyHashBS = "a8376ad675ab3c86f945fd1f7c5773888269dced9b9368c7d7a113ef"
 
 -- Donor public key payment hash
 donorPubKeyHashBS :: B.ByteString
-donorPubKeyHashBS = "5d2fa1f92c0510517fae0dc8a3bc1f60d671937513b9ddd9492680df"
+donorPubKeyHashBS = "f485f3526ffd1569f3ace37e89317380297ec15dc09549356db1cd04"
 
 -- Admin public key payment hash
 adminPubKeyHashBS :: B.ByteString

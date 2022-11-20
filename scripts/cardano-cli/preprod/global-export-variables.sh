@@ -11,11 +11,12 @@ set -o pipefail
 export BASE=/home/lawrence/src/traceability-smart-contract
 export WORK=$BASE/work
 export CARDANO_CLI=/usr/local/bin/cardano-cli
-export CARDANO_NODE_SOCKET_PATH=/home/lawrence/src/traceability-smart-contract/node.socket
+#export CARDANO_NODE_SOCKET_PATH=/home/lawrence/src/traceability-smart-contract/node.socket
+export CARDANO_NODE_SOCKET_PATH=/var/snap/docker/common/var-lib-docker/volumes/cardano-ipc/_data/node.socket
 export TESTNET_MAGIC=1
-export ADMIN_VKEY=/home/lawrence/.local/keys/testnet/admin/admin.vkey
-export ADMIN_SKEY=/home/lawrence/.local/keys/testnet/admin/admin.skey
-export ADMIN_PKH=/home/lawrence/.local/keys/testnet/admin/admin.hash
+export ADMIN_VKEY=/home/lawrence/.local/keys/testnet/admin/key.vkey
+export ADMIN_SKEY=/home/lawrence/.local/keys/testnet/admin/key.skey
+export ADMIN_PKH=/home/lawrence/.local/keys/testnet/admin/key.hash
 export MIN_ADA_OUTPUT_TX=2000000
 export MIN_ADA_OUTPUT_TX_REF=20000000
 export COLLATERAL_ADA=5000000
